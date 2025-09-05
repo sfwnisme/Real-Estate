@@ -1,0 +1,24 @@
+
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - 3000:3000
+    # environment:
+    # dockerfile: Dockerfile
+    develop:
+      watch: 
+        - path: ./package.json
+          action: rebuild
+        - path: ./package-lock.json
+          action: rebuild
+        - path: ./next.config.ts
+          action: rebuild
+        - path: ./tsconfig.json
+          action: rebuild
+        - path: .pnpm-lock.yaml
+          action: rebuild
+        - path: .
+          target: /app
+          action: sync
