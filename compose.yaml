@@ -3,22 +3,33 @@ services:
   web:
     build:
       context: .
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
-    # environment:
-    # dockerfile: Dockerfile
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      # if CPU is high, uncomment the following snippet.
+      # you can also increase the number to reduce the CPU aggressive usage.
+      # - CHOKIDAR_INTERVAL=1000
+      - WATCHPACK_POLLING=true
+    # insure container uses its own node_modules for consistency
+    volumes: 
+      - /app/node_modules
     develop:
       watch: 
         - path: ./package.json
           action: rebuild
-        - path: ./package-lock.json
+        - path: ./pnpm-lock.yaml
           action: rebuild
         - path: ./next.config.ts
           action: rebuild
         - path: ./tsconfig.json
           action: rebuild
-        - path: .pnpm-lock.yaml
-          action: rebuild
         - path: .
           target: /app
           action: sync
+          # ignore copy any dir of file for the hosting machine(windows, mac, linux) listed below, and use the container's own ones
+          ignore:
+            - node_modules/
+            - .next/
+            - .git/

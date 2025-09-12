@@ -8,9 +8,11 @@ type Props = {}
 
 export default function Nav({ }: Props) {
   return (
-    <nav className='flex items-center h-fit px-6 pb-6 sticky top-0 z-50'>
+    <nav className='flex items-center h-fit px-6 py-6 sticky top-0 z-50 bg-red- backdrop-blur-xs'>
       <div className='w-50 max-w-full h-auto overflow-hidden me-auto'>
-        <Image className='size-full' src="/logoipsum.png" alt="logo" width={200} height={50} />
+        <Link href="/" className='flex size-full'>
+          <Image className='size-full' src="/logoipsum.png" alt="logo" width={200} height={50} />
+        </Link>
       </div>
       <ul className='flex items-center gap-8 max-md:hidden'>
         <li><Link href="/properties" className='font-medium'>Properties</Link></li>
