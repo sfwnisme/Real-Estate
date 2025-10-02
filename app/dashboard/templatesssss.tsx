@@ -1,4 +1,4 @@
-'use client'
+import React, { Suspense } from 'react'
 
 type Props = {
   children: React.ReactNode
@@ -6,6 +6,10 @@ type Props = {
 
 export default function template({ children }: Props) {
   return (
-    <div>{children}</div>
+    <div>
+      <Suspense>
+        {children}
+      </Suspense>
+    </div>
   )
 }

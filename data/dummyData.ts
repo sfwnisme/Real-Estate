@@ -129,6 +129,7 @@ export const servicesDummyData = [
 
 export const propertiesPagesDummy: Property[] = [
   {
+    "id": 1,
     "propertyId": "prop-12345",
     "title": "Charming Family Home with Modern Amenities",
     "price": 750000,
@@ -160,12 +161,12 @@ export const propertiesPagesDummy: Property[] = [
       ]
     },
     "address": {
-      "address": "123 Main Street",
       "city": "Anytown",
       "state": "CA",
       "zipCode": "12345",
       "area": "Green Valley",
-      "country": "USA"
+      "country": "USA",
+      "other": "123 Main Street",
     },
     "features": [
       "Hardwood floors",
@@ -174,6 +175,7 @@ export const propertiesPagesDummy: Property[] = [
     ]
   },
   {
+    "id": 2,
     "propertyId": "prop-67890",
     "title": "Luxury Penthouse with Rooftop Terrace",
     "price": 1200000,
@@ -205,12 +207,12 @@ export const propertiesPagesDummy: Property[] = [
       ]
     },
     "address": {
-      "address": "456 High Rise Avenue",
       "city": "Metropolis",
       "state": "NY",
       "zipCode": "54321",
       "area": "Downtown",
-      "country": "USA"
+      "country": "USA",
+      "other": "456 High Rise Avenue",
     },
     "features": [
       "Floor-to-ceiling windows",
@@ -219,6 +221,7 @@ export const propertiesPagesDummy: Property[] = [
     ]
   },
   {
+    "id": 3,
     "propertyId": "prop-abcde",
     "title": "Cozy Bungalow for First-Time Buyers",
     "price": 350000,
@@ -247,12 +250,12 @@ export const propertiesPagesDummy: Property[] = [
       ]
     },
     "address": {
-      "address": "789 Quiet Lane",
       "city": "Smallville",
       "state": "IL",
       "zipCode": "98765",
       "area": "The Meadows",
-      "country": "USA"
+      "country": "USA",
+      "other": "789 Quiet Lane",
     },
     "features": [
       "Fenced backyard",
@@ -261,6 +264,7 @@ export const propertiesPagesDummy: Property[] = [
     ]
   },
   {
+    "id": 4,
     "propertyId": "prop-fghij",
     "title": "Modern Townhouse with Open Layout",
     "price": 950000,
@@ -290,12 +294,12 @@ export const propertiesPagesDummy: Property[] = [
       ]
     },
     "address": {
-      "address": "101 Grand Street",
       "city": "Uptown",
       "state": "TX",
       "zipCode": "67890",
       "area": "The Bluffs",
-      "country": "USA"
+      "country": "USA",
+      "other": "101 Grand Street",
     },
     "features": [
       "High ceilings",
@@ -304,6 +308,7 @@ export const propertiesPagesDummy: Property[] = [
     ]
   },
   {
+    "id": 5,
     "propertyId": "prop-klmno",
     "title": "Sprawling Estate with Equestrian Facilities",
     "price": 2500000,
@@ -336,12 +341,12 @@ export const propertiesPagesDummy: Property[] = [
       ]
     },
     "address": {
-      "address": "222 Country Road",
       "city": "Ruralville",
       "state": "CO",
       "zipCode": "13579",
       "area": "The Foothills",
-      "country": "USA"
+      "country": "USA",
+      "other": "222 Country Road",
     },
     "features": [
       "Private lake access",
@@ -350,6 +355,7 @@ export const propertiesPagesDummy: Property[] = [
     ]
   },
   {
+    "id": 13,
     "propertyId": "prop-pqrst",
     "title": "Charming Cottage with Artist's Studio",
     "price": 550000,
@@ -378,12 +384,12 @@ export const propertiesPagesDummy: Property[] = [
       ]
     },
     "address": {
-      "address": "333 Forest Path",
       "city": "Willow Creek",
       "state": "OR",
       "zipCode": "24680",
       "area": "The Woods",
-      "country": "USA"
+      "country": "USA",
+      "other": "333 Forest Path",
     },
     "features": [
       "Mature trees",

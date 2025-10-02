@@ -20,7 +20,26 @@ services:
       # - CHOKIDAR_INTERVAL=1000
       - WATCHPACK_POLLING=true
     # insure container uses its own node_modules for consistency
-    volumes:
-      - .:/app
+    volumes: 
       - /app/node_modules
-
+    develop:
+      watch: 
+        # Rebuild image when dependencies change so container picks up new packages automatically
+        - path: ./package.json
+          action: rebuild
+        - path: ./pnpm-lock.yaml
+          action: rebuild
+        - path: ./next.config.ts
+          target: /app/next.config.ts
+          action: sync
+        - path: ./tsconfig.json
+          target: /app/tsconfig.json
+          action: sync
+        - path: .
+          target: /app
+          action: sync
+          # ignore copy any dir of file for the hosting machine(windows, mac, linux) listed below, and use the container's own ones
+          ignore:
+            - node_modules/
+            - .next/
+            - .git/

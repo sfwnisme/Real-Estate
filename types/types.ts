@@ -1,32 +1,39 @@
+enum PropertyType {
+  Appartment = "appartment",
+  Villa = "villa",
+  Chalet = "chalet",
+  Studio = "studio"
+}
 export type Property = {
+  id: string,
+  images: string,
   propertyId: string;
   title: string,
   price: number;
   description: string,
-  propertySize: string;
+  propertySize: number;
   bedrooms: number;
   bathrooms: number;
   garage: number;
-  garageSize: string;
+  garageSize: number;
   yearBuilt: number;
-  propertyType: string;
-  propertyStatus: string;
-  additionalDetails: PropertyAdditionalDetails;
+  propertyType: 'appartment' | 'villa' | 'chalet' | 'studio';
+  propertyStatus: 'for-sale' | 'for-rent' | 'sold' | 'rented';
   address: PropertyAddress;
-  features?: string[]
-};
-type PropertyAdditionalDetails = {
-  deposit: string;
-  poolSize: string;
-  amenities: string[];
-  additionalRooms: string[];
-  equipment: string[];
+  features?: string
 };
 export type PropertyAddress = {
-  address: string;
   city: string;
   state: string;
   zipCode: string;
   area: string;
   country: string;
+  other: string;
 };
+export type PaginationType = {
+  totalData: number,
+  totalPages: number,
+  currentPage: number,
+  nextPage: number,
+  pageLimit: number
+}

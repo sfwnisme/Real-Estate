@@ -15,15 +15,18 @@ type Props = {
 }
 
 export default function PropertyCarousel({ images }: Props) {
+  console.log('images', images)
   return (
     <div data-component="carousel-container" className='flex items-center w-full justify-center'>
       <Carousel className="w-full max-w-full">
-        <CarouselContent className='h-120 m-0! gap-4'>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem key={index} className='rounded-2xl overflow-hidden pl-0!'>
-              {images.map((image) => <Image src={image} width='1900' height='1000' alt='property image' className="size-full object-cover" key={image} />)}
-            </CarouselItem>
-          ))}
+        <CarouselContent className='lg:h-140 m-0! gap-4'>
+          {
+            images.map((image) => (
+              <CarouselItem className='rounded-2xl overflow-hidden pl-0!'>
+                <Image src={image.trim()} width='1900' height='1000' alt='property image' className="size-full object-cover" key={image} />
+              </CarouselItem>
+            ))
+          }
         </CarouselContent>
         <CarouselPrevious className='left-4 bg-gray-900/80 text-gray-50' />
         <CarouselNext className='right-4 bg-gray-900/80 text-gray-50 border-transparent' />
