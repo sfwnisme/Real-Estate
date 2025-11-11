@@ -1,15 +1,15 @@
-import Footer from '@/components/custom/footer'
-import Nav from '@/components/custom/nav'
+import FooterView from '@/features/client/footer-view'
+import NavView from '@/features/client/nav-view'
 import React from 'react'
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <div data-component="pages-layout" className='bg-gray-50'>
-      <Nav />
-      <div className='px-4'>
+      <NavView />
+      <div className='px-4 mb-20'>
         {children}
       </div>
-      <Footer />
+      <FooterView />
     </div>
   )
 }

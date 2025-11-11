@@ -1,4 +1,4 @@
-import ButtonLink from '@/components/custom/buttonLink'
+import ButtonLink from '@/components/custom/button-link'
 import React from 'react'
 
 export default function NotFound() {
@@ -8,7 +8,7 @@ export default function NotFound() {
       <p className="text-lg text-gray-600 font-light mb-6">
         Property does not exist
       </p>
-      <ButtonLink href='/dashboard'>
+      <ButtonLink href='/dashboard/properties'>
         Back to Home Page
       </ButtonLink>
     </div>

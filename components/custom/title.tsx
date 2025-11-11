@@ -1,7 +1,7 @@
 import { ArrowRight, LucideIcon, LucideProps } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import ButtonLink from "./buttonLink";
+import ButtonLink from "./button-link";
 import { Badge } from "../ui/badge";
 
 type Props = {

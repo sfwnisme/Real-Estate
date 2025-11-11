@@ -1,53 +1,77 @@
-"use client"
-import React from 'react'
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '../ui/pagination'
-import { usePathname, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
+"use client";
+import React from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination";
+import { usePathname, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { Pagination as PaginationType } from "@/types/types";
 
-type Props = {
-  currentPage: number,
-  nextPage: number,
-  totalPages: number,
-}
+type Props = Pick<
+  PaginationType,
+  "page" | "nextPage" | "prevPage" | "totalPages"
+> & { currentPage: number | string };
 
-export default function PaginationLayout({ currentPage, nextPage, totalPages}: Props) {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+export default function PaginationLayout({
+  page,
+  nextPage,
+  prevPage,
+  totalPages,
+  currentPage
+}: Props) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const createPageURL = (pageNumber: number | string) => {
-    const params = new URLSearchParams(searchParams)
-    params.set('page', String(pageNumber))
-    return `${pathname}?${String(params)}`
-  }
+  const createPageURL = (pageNumber: number | null) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", String(pageNumber));
+    return `${pathname}?${String(params)}`;
+  };
 
   return (
     <div>
       <Pagination>
         <PaginationContent>
-          <PaginationItem className={currentPage == 1 ? "pointer-events-none opacity-25" : undefined}>
-            <Link href={createPageURL(currentPage - 1)} passHref><PaginationPrevious /></Link>
+          <PaginationItem
+            className={!prevPage ? "pointer-events-none opacity-25" : undefined}
+          >
+            <Link href={createPageURL(prevPage)} passHref>
+              <PaginationPrevious />
+            </Link>
           </PaginationItem>
-          {
-            currentPage > 1 &&
+          {page > 1 && (
             <PaginationItem>
-              <Link href={createPageURL(currentPage - 1)} passHref><PaginationLink>{currentPage - 1}</PaginationLink></Link>
+              <Link href={createPageURL(prevPage)} passHref>
+                <PaginationLink>{prevPage}</PaginationLink>
+              </Link>
             </PaginationItem>
-          }
+          )}
           <PaginationItem>
-            <PaginationLink isActive>
-              {currentPage}
-            </PaginationLink>
+            <PaginationLink isActive>{currentPage}</PaginationLink>
           </PaginationItem>
-          {currentPage <= totalPages - 1 &&
+          {nextPage !== null && (
             <PaginationItem>
-              <Link href={createPageURL(nextPage)} passHref><PaginationLink>{nextPage}</PaginationLink></Link>
+              <Link href={createPageURL(nextPage)} passHref>
+                <PaginationLink>{nextPage}</PaginationLink>
+              </Link>
             </PaginationItem>
-          }
-          <PaginationItem className={currentPage == nextPage ? "pointer-events-none opacity-25" : undefined}>
-            <Link href={createPageURL(nextPage)} passHref><PaginationNext /></Link>
+          )}
+          <PaginationItem
+            className={
+               nextPage == null? "pointer-events-none opacity-25" : undefined
+            }
+          >
+            <Link href={createPageURL(nextPage)} passHref>
+              <PaginationNext />
+            </Link>
           </PaginationItem>
         </PaginationContent>
       </Pagination>
     </div>
-  )
+  );
 }

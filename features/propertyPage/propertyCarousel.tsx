@@ -1,36 +1,52 @@
-'use client'
-import React from 'react'
-// import Autoplay from "embla-carousel-autoplay"
+import React from "react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel"
-import Image from 'next/image'
+} from "@/components/ui/carousel";
+import Image from "next/image";
+import { getPropertyImages } from "@/lib/requests";
+import { STATUS_TEXT } from "@/constants/enums";
 
 type Props = {
-  images: string[]
-}
+  propertyId: string;
+  propertyAlt: string;
+};
 
-export default function PropertyCarousel({ images }: Props) {
-  console.log('images', images)
+export default async function PropertyCarousel({
+  propertyId,
+  propertyAlt,
+}: Props) {
+  const propertyImages = await getPropertyImages(propertyId);
+  const images = propertyImages.data;
+  if (propertyImages.statusText !== STATUS_TEXT.SUCCESS) {
+    return null;
+  }
   return (
-    <div data-component="carousel-container" className='flex items-center w-full justify-center'>
+    <div
+      data-component="carousel-container"
+      className="flex items-center w-full justify-center rounded-2xl overflow-hidden"
+    >
       <Carousel className="w-full max-w-full">
-        <CarouselContent className='lg:h-140 m-0! gap-4'>
-          {
-            images.map((image) => (
-              <CarouselItem className='rounded-2xl overflow-hidden pl-0!'>
-                <Image src={image.trim()} width='1900' height='1000' alt='property image' className="size-full object-cover" key={image} />
-              </CarouselItem>
-            ))
-          }
+        <CarouselContent className="lg:h-140 m-0! gap-4">
+          {images?.map((image) => (
+            <CarouselItem className="rounded-2xl pl-0!">
+              <Image
+                src={image.url}
+                width={image.dimensions?.width || "1900"}
+                height={image.dimensions?.width || "1000"}
+                alt={`${propertyAlt} - ${image.fileName}`}
+                className="size-full object-cover"
+                key={image._id}
+              />
+            </CarouselItem>
+          ))}
         </CarouselContent>
-        <CarouselPrevious className='left-4 bg-gray-900/80 text-gray-50' />
-        <CarouselNext className='right-4 bg-gray-900/80 text-gray-50 border-transparent' />
+        <CarouselPrevious className="left-4 bg-gray-900/80 text-gray-50" />
+        <CarouselNext className="right-4 bg-gray-900/80 text-gray-50 border-transparent" />
       </Carousel>
     </div>
-  )
+  );
 }

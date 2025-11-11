@@ -1,36 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Real estate standard website
 
-## Getting Started
+A real estate kit full-stack application ready to use for real state companies.
+It is for companies how needs to host their own application, and manage the properties listing.
+You can manage your own properties listing, blog-post SEO building, and offer paid services(needs more implementation depends on the country payments service integrations).
 
-First, run the development server:
+## Application v1 implementations
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [x] fully seo standard support.
+- [ ] implement gsap animations.
+- [ ] marketing tools integration by GTM.
+- [ ] create properties listing, blog posts, users by roles, and files reference.
+- [ ] integrate google reviews.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Application v2 implementations
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] application's settings managed on dashboard.
+- [ ] search data functionality

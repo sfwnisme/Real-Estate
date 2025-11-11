@@ -2,9 +2,13 @@
 
 import * as React from "react"
 import {
+  Book,
+  BookPlus,
   Frame,
   House,
   HousePlus,
+  LibraryBig,
+  NotebookPen,
 } from "lucide-react"
 
 import { DashboardNavRoutes } from "./dashboard-nav-routes"
@@ -40,6 +44,16 @@ const data = {
       name: "Create New Property",
       url: "/dashboard/properties/create",
       icon: HousePlus,
+    },
+    {
+      name: "Blog Posts",
+      url: "/dashboard/blog-posts",
+      icon: LibraryBig,
+    },
+    {
+      name: "Create Blog Posts",
+      url: "/dashboard/blog-posts/create",
+      icon: NotebookPen,
     },
   ],
 }

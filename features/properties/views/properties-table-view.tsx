@@ -1,0 +1,105 @@
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Pencil, Trash } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getProperties } from "@/lib/requests";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { PAGINATION_CONFIG } from "@/constants/enums";
+import { modalQuery } from "@/lib/utils";
+import { PAGES_ROUTES } from "@/constants/config";
+
+type Props = {
+  currentPage: number;
+  searchParams: { [key: string]: string | undefined };
+};
+
+export default async function PropertiesTableView({
+  currentPage,
+  searchParams,
+}: Props) {
+  const properties = await getProperties(
+    PAGINATION_CONFIG.PROPERTIES.DASHBOARD,
+    currentPage
+  );
+  const propertiesData = properties.data?.data;
+  if (!propertiesData || propertiesData?.length === 0) {
+    return notFound();
+  }
+
+  return (
+    <div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Name</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Size</TableHead>
+            <TableHead className="text-start">Year Built</TableHead>
+            <TableHead className="text-start">Type</TableHead>
+            <TableHead className="text-start w-20">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {propertiesData.map((property) => (
+            <TableRow key={property._id}>
+              <TableCell className="font-medium">{property.title}</TableCell>
+              <TableCell>
+                {property.price.toLocaleString("en-SA", {
+                  style: "currency",
+                  currency: "SAR",
+                })}
+              </TableCell>
+              <TableCell className="flex">
+                {property.propertySize}
+                <p>
+                  m<sup>2</sup>
+                </p>
+              </TableCell>
+              <TableCell className="text-start">{property.yearBuilt}</TableCell>
+              <TableCell className="text-start">
+                {property.propertyType}
+              </TableCell>
+              <TableCell className="text-end w-fit">
+                <div className="inline-flex items-center gap-2">
+                  <ButtonGroup>
+                    <Button variant="outline" size="sm">
+                      <Link href={`${PAGES_ROUTES.PROPERTIES.PREVIEW}/${property.slug}`}>Open</Link>
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <Link
+                        href={`${PAGES_ROUTES.PROPERTIES.UPDATE}/${property._id}`}
+                      >
+                        <Pencil />
+                      </Link>
+                    </Button>
+                  </ButtonGroup>
+                  <Link
+                    href={modalQuery(
+                      "delete",
+                      "property",
+                      property._id,
+                      searchParams
+                    )}
+                    prefetch={true}
+                  >
+                    <Button variant="secondary" size="sm">
+                      <Trash />
+                    </Button>
+                  </Link>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}

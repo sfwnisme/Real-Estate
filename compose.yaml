@@ -1,6 +1,6 @@
-
 services:
   web:
+    container_name: frontend-real-estate
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,4 +23,10 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+    networks:
+      - bridge_network
 
+networks:
+  bridge_network:
+    name: real_estate_network
+    external: true

@@ -1,0 +1,97 @@
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Pencil, Trash } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getBlogPosts } from "@/lib/requests";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { PAGINATION_CONFIG } from "@/constants/enums";
+import { formatDate, modalQuery } from "@/lib/utils";
+import { PAGES_ROUTES } from "@/constants/config";
+
+type Props = {
+  currentPage: number;
+  searchParams: { [key: string]: string | undefined };
+};
+
+export default async function BlogPostsTableView({
+  currentPage,
+  searchParams,
+}: Props) {
+  const blogPosts = await getBlogPosts(
+    PAGINATION_CONFIG.BLOG.DASHBOARD,
+    currentPage
+  );
+  const blogPostsData = blogPosts.data?.data;
+  if (!blogPostsData || blogPostsData?.length === 0) {
+    return notFound();
+  }
+
+  return (
+    <div className="overflow-x-scroll w-full">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Title</TableHead>
+            <TableHead className="text-start">Creation Date</TableHead>
+            <TableHead className="text-start">Last Modification</TableHead>
+            <TableHead>Published Date</TableHead>
+            <TableHead className="text-start w-20">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {blogPostsData.map((blogPost) => (
+            <TableRow key={blogPost._id}>
+              <TableCell className="font-medium">{blogPost.title}</TableCell>
+              <TableCell className="text-start">
+                {formatDate(blogPost.createdAt)}
+              </TableCell>
+              <TableCell className="text-start">
+                {formatDate(blogPost.updatedAt)}
+              </TableCell>
+              <TableCell className="text-start">
+                {formatDate(blogPost.publishedAt, "Not Published")}
+              </TableCell>
+              <TableCell className="text-end w-fit">
+                <div className="inline-flex items-center gap-2">
+                  <ButtonGroup>
+                    <Button variant="outline" size="sm">
+                      <Link href={`${PAGES_ROUTES.BLOG_POSTS.PREVIEW}/${blogPost.slug}`}>Open</Link>
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <Link
+                        href={`${PAGES_ROUTES.BLOG_POSTS.UPDATE}/${blogPost._id}`}
+                      >
+                        <Pencil />
+                      </Link>
+                    </Button>
+                  </ButtonGroup>
+                  <Link
+                    href={modalQuery(
+                      "delete",
+                      "blog",
+                      blogPost._id,
+                      searchParams
+                    )}
+                    prefetch={true}
+                  >
+                    <Button variant="secondary" size="sm">
+                      <Trash />
+                    </Button>
+                  </Link>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
