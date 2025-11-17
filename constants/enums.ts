@@ -96,6 +96,6 @@ export const FILES_CONFIGS = {
 
 export const MODELS = {
   PROPERTY: "Property",
-  BLOG: "Blog",
+  BLOG_POST: "BlogPost",
   USER: "User",
 } as const;
