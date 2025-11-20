@@ -1,12 +1,12 @@
 import { STATUS_TEXT } from "@/constants/enums";
 import { ApiErrorResponse } from "@/types/types";
 import { clsx, type ClassValue } from "clsx";
+import { FieldError, Merge } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-
 
 // for application catch block
 export function formatedSerErrRes(msg: string, error: any) {
@@ -70,5 +70,20 @@ export const textTrimmer = (text: string, length: number = 20): string => {
   if (text.length < length) {
     return text;
   }
-  return `${text.slice(0,length)}...`
+  return `${text.slice(0, length)}...`;
+};
+
+export const kbToBytes = (kb: number) => kb * 1024;
+export const bytesToKb = (bytes: number) => bytes / 1024;
+export const returnFileSize = (bytes: number): string => {
+  if (bytes >= 1024 * 1024) {
+    // 1 MB or more
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+  } else if (bytes >= 1024) {
+    // 1 KB or more
+    return (bytes / 1024).toFixed(2) + " KB";
+  } else {
+    // less than 1 KB
+    return bytes + " bytes";
+  }
 };
