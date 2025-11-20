@@ -75,7 +75,7 @@ export default async function PropertiesTableView({
                     </Button>
                     <Button variant="outline" size="sm">
                       <Link
-                        href={`${PAGES_ROUTES.PROPERTIES.UPDATE}/${property._id}`}
+                        href={`${PAGES_ROUTES.PROPERTIES.UPDATE}/${property.slug}`}
                       >
                         <Pencil />
                       </Link>

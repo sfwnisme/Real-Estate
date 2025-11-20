@@ -19,7 +19,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useEffect, useState } from "react";
-import { auth } from "@/lib/firebase.conf";
 import { toast } from "sonner";
 import { getCurrentUser } from "@/lib/requests";
 import { logOut } from "../users/lib/requests";
@@ -44,6 +43,9 @@ export function DashboardNavUser({
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const response = await getCurrentUser();
+      if(!response?.data) {
+        window.location.pathname = "/login"
+      }
       console.log("user client", response);
       setUserData({ name: response.data?.name , email: response.data?.email });
     };

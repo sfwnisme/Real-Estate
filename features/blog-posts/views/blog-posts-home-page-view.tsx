@@ -21,7 +21,7 @@ export default async function BlogPostsHomePageView({
         type="with_button"
         title="Discover insights, trends, and inspiration."
         description="Explore a handpicked collection of stunning homes that reflect timeless design, innovative architecture, and unparalleled luxury."
-        url="/blog"
+        url="/blog-posts"
       />
       <div className="h-16" />
         <Suspense fallback={<BlogPostCardSkeleton count={3} />}>

@@ -1,26 +1,25 @@
 "use server";
 
-import { SERVER_BASE_URL } from "@/constants/enums";
+import { getBaseUrl, STATUS_TEXT } from "@/constants/enums";
 import { formatedApiErrRes, formatedSerErrRes } from "@/lib/utils";
-import {
-  APIResponse,
-  ApiSuccessResponse,
-  ImageType,
-  Property,
-} from "@/types/types";
-import { cookies, headers } from "next/headers";
+import { APIResponse, ImageType, Property } from "@/types/types";
+import { cookies } from "next/headers";
+import { CreatePropertyType } from "../schema/create-property-schema";
+import { API_ROUTES } from "@/constants/config";
+import { UpdatePropertyType } from "../schema/update-property-schema";
+import { CreatePropertyWithImagesType } from "../schema/create-property-with-images-schema";
 
 // update slug
 
 const endpoint = "/properties";
 
 export const createProperty = async (
-  propertyData: Property
+  propertyData: Omit<CreatePropertyWithImagesType, "images">
 ): Promise<APIResponse<Property>> => {
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const bodyToJson = JSON.stringify(propertyData);
-    const url = `${SERVER_BASE_URL}/${endpoint}/create`;
+    const url = process.env.NEXT_PUBLIC_BASE_URL + API_ROUTES.PROPERTIES.CREATE;
     const response = await fetch(url, {
       method: "POST",
       body: bodyToJson,
@@ -33,6 +32,7 @@ export const createProperty = async (
     if (!response.ok) {
       return formatedApiErrRes(responseData);
     }
+    console.log("property created successfully", responseData);
     return responseData;
   } catch (error) {
     return formatedSerErrRes("server error", error);
@@ -40,18 +40,14 @@ export const createProperty = async (
 };
 
 export const createTempPropertyImage = async (
-  image: File,
-  tempId: string
+  data: FormData
 ): Promise<APIResponse<ImageType>> => {
   try {
-    const FD = new FormData();
-    FD.append("file", image);
-    FD.append("tempId", tempId);
     const token = (await cookies()).get("TOKEN")?.value;
-    const url = `${SERVER_BASE_URL}/images/create-temp-property-image`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/images/create-temp-property-image`;
     const response = await fetch(url, {
       method: "POST",
-      body: FD,
+      body: data,
       headers: {
         Authorization: String(token),
       },
@@ -60,7 +56,62 @@ export const createTempPropertyImage = async (
     if (!response.ok) {
       return formatedApiErrRes(responseData);
     }
+    console.log("images response data from requests", responseData);
     return responseData;
+  } catch (error) {
+    return formatedSerErrRes("server error", error);
+  }
+};
+
+export const createMultiTempPropertyImage = async (
+  images: File[],
+  tempId: string
+): Promise<APIResponse<ImageType[]>> => {
+  try {
+    const token = (await cookies()).get("TOKEN")?.value;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/images/create-temp-property-image`;
+    const controller = new AbortController()
+
+    // Send all images as separate requests and collect JSON responses
+    const responses = await Promise.all(
+      images.map(async (image) => {
+        const FD = new FormData();
+        FD.append("file", image);
+        FD.append("tempId", tempId);
+
+        const response = await fetch(url, {
+          method: "POST",
+          body: FD,
+          headers: {
+            Authorization: String(token),
+          },
+          signal: controller.signal
+        });
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          return formatedApiErrRes(responseData);
+        }
+        return responseData;
+      })
+    );
+
+    // If any response is an error, return the first error
+    const errorResponse = responses.find(
+      (res) => !(res as APIResponse<ImageType>).status || (res as any).error
+    );
+    if (errorResponse) {
+      return errorResponse as APIResponse<ImageType[]>;
+    }
+
+    // Return all image data in an array with a success status
+    return {
+      status: 200,
+      statusText: STATUS_TEXT.SUCCESS,
+      msg: "All images uploaded successfully",
+      data: responses as ImageType[],
+      error: null
+    };
   } catch (error) {
     return formatedSerErrRes("server error", error);
   }
@@ -68,14 +119,16 @@ export const createTempPropertyImage = async (
 
 export const createPropertyImage = async (
   image: File,
-  propertyId: string
+  propertyId: string,
+  isFeatured: boolean
 ): Promise<APIResponse<ImageType>> => {
   try {
     const FD = new FormData();
     FD.append("file", image);
     FD.append("propertyId", propertyId);
+    FD.append("isFeatured", String(isFeatured));
     const token = (await cookies()).get("TOKEN")?.value;
-    const url = `${SERVER_BASE_URL}/images/create-property-image`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/images/create-property-image`;
     const response = await fetch(url, {
       method: "POST",
       body: FD,
@@ -94,13 +147,13 @@ export const createPropertyImage = async (
 };
 
 export const updateProperty = async (
-  propertyData: Property,
+  propertyData: UpdatePropertyType,
   propertyId: string
 ): Promise<APIResponse<Property>> => {
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const bodyToJson = JSON.stringify(propertyData);
-    const url = `${SERVER_BASE_URL}/${endpoint}/${propertyId}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}/${propertyId}`;
     const response = await fetch(url, {
       method: "PATCH",
       body: bodyToJson,
@@ -126,7 +179,7 @@ export const updatePropertySlug = async (
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const bodyToJson = JSON.stringify({ propertyId, slug });
-    const url = `${SERVER_BASE_URL}/${endpoint}/update-slug`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}/update-slug`;
     const response = await fetch(url, {
       method: "PATCH",
       body: bodyToJson,
@@ -150,7 +203,7 @@ export const deleteProperty = async (
 ): Promise<APIResponse<null>> => {
   try {
     const token = (await cookies()).get("TOKEN")?.value;
-    const url = `${SERVER_BASE_URL}/${endpoint}/delete/${propertyId}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}/delete/${propertyId}`;
     const response = await fetch(url, {
       method: "DELETE",
       headers: {

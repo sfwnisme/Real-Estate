@@ -2,20 +2,19 @@
 import LoadingSpinner from "@/components/custom/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { auth } from "@/lib/firebase.conf";
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useTransition } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
 import Title from "@/components/custom/title";
 import { login } from "@/lib/requests";
+import InputWrapper from "@/components/custom/input-wrapper";
+import useFormErrors from "@/hooks/use-form-errors";
 
 type Props = {};
 const loginSchema = z.object({
   email: z.email(),
-  password: z.string().min(2, "Minimum required characters is 6"),
+  password: z.string().min(5, "Minimum required characters is 6"),
 });
 type UserLoginType = z.infer<typeof loginSchema>;
 
@@ -27,74 +26,57 @@ export default function LoginFormView({}: Props) {
       email: "",
       password: "",
     },
+    mode: "all",
+    criteriaMode: "all",
   });
 
+  const rootErrors = useFormErrors(form.formState.errors.root, true);
+
   const onSubmit: SubmitHandler<UserLoginType> = async (values) => {
-    const { email, password } = values;
-    const loginResponse = await login(email, password);
-    window.location.pathname = "/dashboard";
+    startLogin(async () => {
+      const { email, password } = values;
+      const loginResponse = await login(email, password);
+      console.log("login resonse :", loginResponse);
+      if (!loginResponse.data) {
+        form.setError("root", { message: loginResponse.msg });
+      } else {
+        window.location.pathname = "/dashboard";
+      }
+    });
   };
+  console.log(form.formState.errors.root?.message);
+  const formErrors = form.formState.errors;
+  const canLogin = form.formState.isValid;
   return (
     <div>
       <Title title="Login"></Title>
       <div className="pb-4" />
       <div className="w-full max-w-md border p-8 rounded mx-auto shadow-2xl">
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-y-5">
-          <Label
-            className="flex flex-col items-start gap-y-3 "
-            htmlFor="email"
-            aria-disabled
+          <InputWrapper
+            title="Email"
+            error={form.formState.errors.email?.message}
           >
-            Email
             <Input
               type="email"
               placeholder="safwanmabdo@gmail.com"
-              id="email"
               {...form.register("email")}
             />
-            <small
-              className={cn(
-                "text-destructive inline-flex items-center visible",
-                {
-                  invisible: !form.formState.errors.email?.message,
-                }
-              )}
-            >
-              {form.formState.errors.email?.message}
-            </small>
-          </Label>
-          <Label className="flex flex-col items-start gap-y-3">
-            Password
+          </InputWrapper>
+          <InputWrapper
+            title="Password"
+            error={form.formState.errors.password?.message}
+          >
             <Input
               type="password"
               placeholder="******"
-              id="password"
               {...form.register("password")}
             />
-            <small
-              className={cn(
-                "text-destructive inline-flex items-center visible",
-                {
-                  invisible: !form.formState.errors?.password,
-                }
-              )}
-            >
-              {form.formState.errors.password?.message}
-            </small>
-          </Label>
-          <Button type="submit" className="w-full mt-4">
+          </InputWrapper>
+          <Button type="submit" className="w-full mt-4" disabled={!canLogin}>
             {isLogin && <LoadingSpinner />}Login
           </Button>
-          <small
-            className={cn(
-              "text-destructive inline-flex items-center min-h-5 visible",
-              {
-                invisible: !form.formState.errors.root,
-              }
-            )}
-          >
-            {form.formState.errors.root?.message}
-          </small>
+          {rootErrors}
         </form>
       </div>
     </div>
