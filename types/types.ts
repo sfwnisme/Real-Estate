@@ -31,7 +31,7 @@ export type Property = {
   yearBuilt: number;
   propertyType: PropertyType;
   propertyStatus: PropertyStatus;
-  hidde: boolean;
+  hide: boolean;
   video: string;
   address: PropertyAddress;
   features?: string;
@@ -129,7 +129,7 @@ export type ImageType = {
   _id: string;
   url: string;
   fileName: string;
-  ownerModel: (typeof MODELS)[keyof typeof MODELS];
+  ownerModel: Models;
   ownerId: string;
   mimeType: string;
   size: number;
