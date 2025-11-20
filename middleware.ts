@@ -1,7 +1,5 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { SERVER_BASE_URL } from "./constants/enums";
-import { ApiSuccessResponse, User } from "./types/types";
 
 const protectedRoutes = "/dashboard";
 const publicRoutes = ["/", "/login"];
