@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${interFont.variable} antialiased overflow-x-hidden`}>
         {children}
-        <Toaster position="top-right" richColors expand/>
+        <Toaster position="top-right" expand/>
       </body>
     </html>
   );
