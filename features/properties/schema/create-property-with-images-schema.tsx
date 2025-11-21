@@ -1,45 +1,6 @@
 import z from "zod";
 import { PROPERTY_STATUS, PROPERTY_TYPE } from "@/constants/enums";
-import { isValidObjectId } from "@/lib/object-id";
-import { kbToBytes } from "@/lib/utils";
-// import { isValidObjectId } from "@/lib/object-id";
-
-const createImageSchema = z
-  .array(
-    z
-      .file()
-      .max(kbToBytes(1024 * 2), "maximum size is 2MB")
-      .mime(
-        ["image/webp", "image/jpeg"],
-        "only accept .webp and .jpeg image types"
-      )
-  )
-  .max(10, "upload maximum 4 images");
-
-const createImageSchema2 = z.object({
-  file: z
-    .file()
-    .max(kbToBytes(1024 * 2), "maximum size is 500KB")
-    .mime(
-      ["image/webp", "image/jpeg"],
-      "only accept .webp and .jpeg image types"
-    ),
-  isFeatured: z.boolean(),
-});
-const createImagesSchema = z
-  .array(
-    z.object({
-      image: z
-        .file()
-        .max(kbToBytes(1024 * 2), "maximum size is 500KB")
-        .mime(
-          ["image/webp", "image/jpeg"],
-          "only accept .webp and .jpeg image types"
-        ),
-      isFeatured: z.boolean(),
-    })
-  )
-  .max(4, "upload maximum 4 images");
+import { createImagesSchema } from "./image-schema";
 
 export const createPropertyWithImagesSchema = z.object({
   title: z.string().min(3, { message: "field is required" }),
