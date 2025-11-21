@@ -11,7 +11,7 @@ import { CreatePropertyWithImagesType } from "../schema/create-property-with-ima
 
 // update slug
 
-const endpoint = "/properties";
+const { GET, CREATE, UPDATE, UPDATE_SLUG, DELETE } = API_ROUTES.PROPERTIES;
 
 export const createProperty = async (
   propertyData: Omit<CreatePropertyWithImagesType, "images">
@@ -19,7 +19,7 @@ export const createProperty = async (
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const bodyToJson = JSON.stringify(propertyData);
-    const url = process.env.NEXT_PUBLIC_BASE_URL + API_ROUTES.PROPERTIES.CREATE;
+    const url = process.env.NEXT_PUBLIC_BASE_URL + CREATE;
     const response = await fetch(url, {
       method: "POST",
       body: bodyToJson,
@@ -70,7 +70,7 @@ export const createMultiTempPropertyImage = async (
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/images/create-temp-property-image`;
-    const controller = new AbortController()
+    const controller = new AbortController();
 
     // Send all images as separate requests and collect JSON responses
     const responses = await Promise.all(
@@ -85,7 +85,7 @@ export const createMultiTempPropertyImage = async (
           headers: {
             Authorization: String(token),
           },
-          signal: controller.signal
+          signal: controller.signal,
         });
 
         const responseData = await response.json();
@@ -110,7 +110,7 @@ export const createMultiTempPropertyImage = async (
       statusText: STATUS_TEXT.SUCCESS,
       msg: "All images uploaded successfully",
       data: responses as ImageType[],
-      error: null
+      error: null,
     };
   } catch (error) {
     return formatedSerErrRes("server error", error);
@@ -153,7 +153,7 @@ export const updateProperty = async (
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const bodyToJson = JSON.stringify(propertyData);
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}/${propertyId}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}${UPDATE}/${propertyId}`;
     const response = await fetch(url, {
       method: "PATCH",
       body: bodyToJson,
@@ -179,7 +179,7 @@ export const updatePropertySlug = async (
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const bodyToJson = JSON.stringify({ propertyId, slug });
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}/update-slug`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}${UPDATE_SLUG}/${propertyId}`;
     const response = await fetch(url, {
       method: "PATCH",
       body: bodyToJson,
@@ -203,7 +203,7 @@ export const deleteProperty = async (
 ): Promise<APIResponse<null>> => {
   try {
     const token = (await cookies()).get("TOKEN")?.value;
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}/delete/${propertyId}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}${DELETE}/${propertyId}`;
     const response = await fetch(url, {
       method: "DELETE",
       headers: {
