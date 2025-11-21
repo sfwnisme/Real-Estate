@@ -16,6 +16,7 @@ import {
 import { cookies } from "next/headers";
 import { formatedApiErrRes, formatedSerErrRes } from "./utils";
 import { API_ROUTES } from "@/constants/config";
+import { revalidatePath } from "next/cache";
 
 export const getData = async <T>(
   endpoint: string,
@@ -94,11 +95,13 @@ export const getProperties = async (
 };
 
 export const getPropertyImages = async (
-  propertyId: string
+  propertyId: string,
 ): Promise<APIResponse<ImageType[]>> => {
   try {
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}${"/images/property/"}${propertyId}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      next: {tags: [`delete-image-${propertyId}`]}
+    });
     const responseData = await response.json();
 
     if(!response.ok) {
@@ -259,7 +262,7 @@ export const getCurrentUser = async (): Promise<
 };
 
 // delete image -> (imageId)export
-export const deleteImage = async (imageId: string) => {
+export const deleteImage = async (imageId: string, ownerId: string) => {
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/images/delete/${imageId}`;
@@ -274,6 +277,7 @@ export const deleteImage = async (imageId: string) => {
     if(!response.ok) {
       return formatedApiErrRes(responseData)
     }
+    revalidatePath(`delete-image-${ownerId}`)
     return responseData;
   } catch (error) {
     return formatedSerErrRes("server error", error);
