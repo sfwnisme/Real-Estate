@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { STATUS_TEXT, PROPERTY_TYPE, PROPERTY_STATUS } from "@/constants/enums";
 import {
   CreatePropertyWithImagesType,
-  createPropertyWithImagesSchema,
+  CreatePropertyWithImagesSchema,
 } from "../schema/create-property-with-images-schema";
 import { PAGES_ROUTES } from "@/constants/config";
 
@@ -24,7 +24,7 @@ export default function useCreatePropertyWithImagesFormValidation() {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<CreatePropertyWithImagesType>({
-    resolver: zodResolver(createPropertyWithImagesSchema),
+    resolver: zodResolver(CreatePropertyWithImagesSchema),
     defaultValues: {
       title: "",
       description: "",

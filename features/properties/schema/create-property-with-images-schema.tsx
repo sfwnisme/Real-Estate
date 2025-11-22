@@ -1,8 +1,8 @@
 import z from "zod";
 import { PROPERTY_STATUS, PROPERTY_TYPE } from "@/constants/enums";
-import { createImagesSchema } from "./image-schema";
+import { ImagesArraySchema } from "./image-schema";
 
-export const createPropertyWithImagesSchema = z.object({
+export const CreatePropertyWithImagesSchema = z.object({
   title: z.string().min(3, { message: "field is required" }),
   description: z.string().min(15, { message: "field is required" }),
   price: z.coerce
@@ -40,25 +40,26 @@ export const createPropertyWithImagesSchema = z.object({
   features: z.string().optional(),
   hide: z.boolean(),
   video: z.string().optional(),
-  address: z.object({
-    // add places data
-    country: z.string().min(1, { message: "field is required" }).optional(),
-    state: z.string().min(1, { message: "field is required" }).optional(),
-    city: z.string().min(1, { message: "field is required" }).optional(),
-    area: z.string().min(1, { message: "field is required" }).optional(),
-    zipCode: z.string().min(1, { message: "field is required" }).optional(),
-    other: z.string().optional(),
-  }),
-  images: createImagesSchema,
+  address: z
+    .object({
+      // add places data
+      country: z.string(),
+      state: z.string(),
+      city: z.string().min(1, { message: "field is required" }),
+      area: z.string(),
+      zipCode: z.string(),
+      other: z.string(),
+    }),
+  images: ImagesArraySchema,
 });
 
 export type CreatePropertyWithImagesType = z.infer<
-  typeof createPropertyWithImagesSchema
+  typeof CreatePropertyWithImagesSchema
 >;
 
 export type CreatePropertyWithImagesInputType = z.input<
-  typeof createPropertyWithImagesSchema
+  typeof CreatePropertyWithImagesSchema
 >;
 export type CreatePropertyWithImagesOutputType = z.output<
-  typeof createPropertyWithImagesSchema
+  typeof CreatePropertyWithImagesSchema
 >;

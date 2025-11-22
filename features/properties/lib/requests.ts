@@ -8,11 +8,12 @@ import { CreatePropertyType } from "../schema/create-property-schema";
 import { API_ROUTES } from "@/constants/config";
 import { UpdatePropertyType } from "../schema/update-property-schema";
 import { CreatePropertyWithImagesType } from "../schema/create-property-with-images-schema";
+import { revalidatePath } from "next/cache";
 
 // update slug
 
 const { GET, CREATE, UPDATE, UPDATE_SLUG, DELETE } = API_ROUTES.PROPERTIES;
-
+const { MAKE_IMAGE_FEATURED } = API_ROUTES.IMAGES;
 export const createProperty = async (
   propertyData: Omit<CreatePropertyWithImagesType, "images">
 ): Promise<APIResponse<Property>> => {
@@ -120,7 +121,7 @@ export const createMultiTempPropertyImage = async (
 export const createPropertyImage = async (
   image: File,
   propertyId: string,
-  isFeatured: boolean
+  isFeatured: boolean = false
 ): Promise<APIResponse<ImageType>> => {
   try {
     const FD = new FormData();
@@ -145,6 +146,30 @@ export const createPropertyImage = async (
     return formatedSerErrRes("server error", error);
   }
 };
+
+export const setFeaturedImage = async(imageId: string, ownerId: string): Promise<APIResponse<ImageType>> => {
+  try {
+    const token = (await cookies()).get("TOKEN")?.value;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}${MAKE_IMAGE_FEATURED}`;
+    const bodyToJson = JSON.stringify({ imageId, ownerId });
+    const response = await fetch(url, {
+      method: "PATCH",
+      body: bodyToJson,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: String(token),
+      },
+    });
+    const responseData = await response.json();
+    if (!response.ok) {
+      return formatedApiErrRes(responseData);
+    }
+    revalidatePath(`property-images-${ownerId}`);
+    return responseData;
+  } catch (error) {
+    return formatedSerErrRes("server error", error);
+  }
+}
 
 export const updateProperty = async (
   propertyData: UpdatePropertyType,
