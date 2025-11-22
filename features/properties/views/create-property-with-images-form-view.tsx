@@ -177,7 +177,7 @@ const CreatePropertyWithImagesFormView = () =>  {
           <div className="grid gap-4 col-span-full p-4 border rounded-2xl">
             <div className="flex flex-col gap-4">
               <div className="col-span-">
-                <Label className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-primary/5 dark:has-[[aria-checked=true]]:border-primary dark:has-[[aria-checked=true]]:bg-primary">
+                <Label className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3 has-aria-checked:border-primary has-aria-checked:bg-primary/5 dark:has-aria-checked:border-primary dark:has-aria-checked:bg-primary">
                   <Checkbox
                     id="toggle-2"
                     className="data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-white dark:data-[state=checked]:border-primary dark:data-[state=checked]:bg-primary"
