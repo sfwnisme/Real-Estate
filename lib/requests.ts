@@ -100,7 +100,7 @@ export const getPropertyImages = async (
   try {
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}${"/images/property/"}${propertyId}`;
     const response = await fetch(url, {
-      next: {tags: [`delete-image-${propertyId}`]}
+      next: {tags: [`delete-image-${propertyId}`, `property-images-${propertyId}`]}
     });
     const responseData = await response.json();
 
