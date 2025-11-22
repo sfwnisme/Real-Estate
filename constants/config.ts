@@ -75,6 +75,7 @@ export const API_ROUTES = {
   IMAGES: {
     GET: "/images/users",
     GET_PROPERTY_IMAGES: "/images/property",
+    MAKE_IMAGE_FEATURED: "/images/make-image-featured",
     CREATE_PROPERTY_IMAGE: "/images/create-property-image",
     CREATE_TEMP_PROPERTY_IMAGE: "/images/create-temp-property-image",
     GET_BLOG_POST_IMAGES: "/images/blog-post",
