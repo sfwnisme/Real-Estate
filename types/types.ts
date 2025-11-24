@@ -124,7 +124,7 @@ export type ApiErrorResponse = {
 };
 
 export type APIResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
-export type APIResponsePaginated<T> = APIResponse<PaginationResponseType<T>>
+export type APIResponsePaginated<T> = APIResponse<PaginationResponseType<T>>;
 export type ImageType = {
   _id: string;
   url: string;
@@ -149,12 +149,5 @@ export type OgImageType = {
   alt: string;
   type: string;
 };
-// export type PaginationType = {
-//   totalData: number;
-//   totalPages: number;
-//   currentPage: number;
-//   nextPage: number;
-//   pageLimit: number;
-// };
 
 export type SearchParamsType = Promise<{ [key: string]: string | undefined }>;
