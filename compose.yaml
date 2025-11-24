@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
-    restart: unless-stopped
+    # restart: unless-stopped
     environment:
       - NEXT_PUBLIC_API_KEY=${NEXT_PUBLIC_API_KEY}
       - NEXT_PUBLIC_AUTH_DOMAIN=${NEXT_PUBLIC_AUTH_DOMAIN}
@@ -14,11 +14,11 @@ services:
       - NEXT_PUBLIC_STORAGE_BUCKET=${NEXT_PUBLIC_STORAGE_BUCKET}
       - NEXT_PUBLIC_MESSAGING_SENDER_ID=${NEXT_PUBLIC_MESSAGING_SENDER_ID}
       - NEXT_PUBLIC_APP_ID=${NEXT_PUBLIC_APP_ID}
-      - CHOKIDAR_USEPOLLING=true
+      # - CHOKIDAR_USEPOLLING=true
       # if CPU is high, uncomment the following snippet.
       # you can also increase the number to reduce the CPU aggressive usage.
       # - CHOKIDAR_INTERVAL=1000
-      - WATCHPACK_POLLING=true
+      # - WATCHPACK_POLLING=true
     # insure container uses its own node_modules for consistency
     volumes:
       - .:/app
