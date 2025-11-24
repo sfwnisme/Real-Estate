@@ -1,7 +1,8 @@
 import { STATUS_TEXT } from "@/constants/enums";
 import CreatePropertyTempImageFormView from "@/features/properties/views/create-property-temp-image-form-view";
 import PropertyImagesView from "@/features/properties/views/property-images-view";
-import UpdatePropertyFormView from "@/features/properties/views/update-property-form-view";
+import UpdatePropertyFormView from "@/features/properties/views/mutation-views/update-property-form-view";
+import UpdatePropertyView from "@/features/properties/views/mutation-views/update-property-view";
 import { getProperty, getPropertyImages } from "@/lib/requests";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -23,17 +24,16 @@ export default async function page(props: {
     notFound();
   }
   const propertyImages = await getPropertyImages(property.data._id);
+
   return (
-    <div>
-      <h1>Update</h1>
-      <UpdatePropertyFormView property={property.data} />
-      <h2 className="text-xl font-bold mt-8 mb-4">Images</h2>
-      <PropertyImagesView images={propertyImages} />
-      <h2 className="text-xl font-bold mt-8 mb-4">Upload new images</h2>
-      {/* <UploadI */}
-      <div className="flex items-center justify-end w-full">
-        <CreatePropertyTempImageFormView id={property.data._id} />
-      </div>
+    <div className="flex flex-col gap-4">
+      <h1 className="text-2xl font-semibold text-primary">
+        Editing: {property.data.title}
+      </h1>
+      <UpdatePropertyView
+        property={property.data}
+        images={propertyImages.data}
+      />
     </div>
   );
 }

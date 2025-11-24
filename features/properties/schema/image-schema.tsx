@@ -1,10 +1,14 @@
 import z from "zod";
 import { kbToBytes } from "@/lib/utils";
-
+const MAX_IMAGES = 15;
+const MAX_IMAGE_SIZE = 500 * 1024;
 export const CreateImageSchema = z.object({
   image: z
     .file()
-    .max(kbToBytes(1024 * 2), "maximum size is 500KB")
+    .max(
+      kbToBytes(MAX_IMAGE_SIZE),
+      `maximum size is ${MAX_IMAGE_SIZE / 1024}KB`
+    )
     .mime(
       ["image/webp", "image/jpeg"],
       "only accept .webp and .jpeg image types"
@@ -14,7 +18,7 @@ export const CreateImageSchema = z.object({
 
 export const ImagesArraySchema = z
   .array(CreateImageSchema)
-  .max(15, "upload maximum 15 images");
+  .max(MAX_IMAGES, `upload maximum ${MAX_IMAGES} images`);
 
 export const CreateArrayImagesSchema = z.object({
   images: ImagesArraySchema,

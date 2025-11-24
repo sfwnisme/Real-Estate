@@ -16,7 +16,7 @@ import {
 import { cookies } from "next/headers";
 import { formatedApiErrRes, formatedSerErrRes } from "./utils";
 import { API_ROUTES } from "@/constants/config";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export const getData = async <T>(
   endpoint: string,
@@ -277,7 +277,7 @@ export const deleteImage = async (imageId: string, ownerId: string) => {
     if(!response.ok) {
       return formatedApiErrRes(responseData)
     }
-    revalidatePath(`delete-image-${ownerId}`)
+    revalidateTag(`delete-image-${ownerId}`)
     return responseData;
   } catch (error) {
     return formatedSerErrRes("server error", error);

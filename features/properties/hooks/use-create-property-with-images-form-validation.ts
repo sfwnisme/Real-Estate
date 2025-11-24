@@ -17,7 +17,7 @@ import { STATUS_TEXT, PROPERTY_TYPE, PROPERTY_STATUS } from "@/constants/enums";
 import {
   CreatePropertyWithImagesType,
   CreatePropertyWithImagesSchema,
-} from "../schema/create-property-with-images-schema";
+} from "../schema/property-schema";
 import { PAGES_ROUTES } from "@/constants/config";
 
 export default function useCreatePropertyWithImagesFormValidation() {

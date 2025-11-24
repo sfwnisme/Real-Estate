@@ -4,11 +4,10 @@ import { getBaseUrl, STATUS_TEXT } from "@/constants/enums";
 import { formatedApiErrRes, formatedSerErrRes } from "@/lib/utils";
 import { APIResponse, ImageType, Property } from "@/types/types";
 import { cookies } from "next/headers";
-import { CreatePropertyType } from "../schema/create-property-schema";
 import { API_ROUTES } from "@/constants/config";
 import { UpdatePropertyType } from "../schema/update-property-schema";
 import { CreatePropertyWithImagesType } from "../schema/create-property-with-images-schema";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 // update slug
 
@@ -141,6 +140,7 @@ export const createPropertyImage = async (
     if (!response.ok) {
       return formatedApiErrRes(responseData);
     }
+    revalidateTag(`property-images-${propertyId}`)
     return responseData;
   } catch (error) {
     return formatedSerErrRes("server error", error);
@@ -164,7 +164,7 @@ export const setFeaturedImage = async(imageId: string, ownerId: string): Promise
     if (!response.ok) {
       return formatedApiErrRes(responseData);
     }
-    revalidatePath(`property-images-${ownerId}`);
+    revalidateTag(`property-images-${ownerId}`);
     return responseData;
   } catch (error) {
     return formatedSerErrRes("server error", error);
@@ -204,7 +204,7 @@ export const updatePropertySlug = async (
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const bodyToJson = JSON.stringify({ propertyId, slug });
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}${UPDATE_SLUG}/${propertyId}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}${UPDATE_SLUG}`;
     const response = await fetch(url, {
       method: "PATCH",
       body: bodyToJson,
