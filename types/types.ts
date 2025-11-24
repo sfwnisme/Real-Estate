@@ -31,7 +31,7 @@ export type Property = {
   yearBuilt: number;
   propertyType: PropertyType;
   propertyStatus: PropertyStatus;
-  hidde: boolean;
+  hide: boolean;
   video: string;
   address: PropertyAddress;
   features?: string;
@@ -124,12 +124,12 @@ export type ApiErrorResponse = {
 };
 
 export type APIResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
-export type APIResponsePaginated<T> = APIResponse<PaginationResponseType<T>>
+export type APIResponsePaginated<T> = APIResponse<PaginationResponseType<T>>;
 export type ImageType = {
   _id: string;
   url: string;
   fileName: string;
-  ownerModel: (typeof MODELS)[keyof typeof MODELS];
+  ownerModel: Models;
   ownerId: string;
   mimeType: string;
   size: number;
@@ -149,12 +149,5 @@ export type OgImageType = {
   alt: string;
   type: string;
 };
-// export type PaginationType = {
-//   totalData: number;
-//   totalPages: number;
-//   currentPage: number;
-//   nextPage: number;
-//   pageLimit: number;
-// };
 
 export type SearchParamsType = Promise<{ [key: string]: string | undefined }>;

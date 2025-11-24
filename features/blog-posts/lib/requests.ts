@@ -1,6 +1,6 @@
 "use server";
 
-import { SERVER_BASE_URL } from "@/constants/enums";
+import { getBaseUrl } from "@/constants/enums";
 import { formatedApiErrRes, formatedSerErrRes } from "@/lib/utils";
 import { APIResponse, BlogPost, ImageType } from "@/types/types";
 import { cookies } from "next/headers";
@@ -11,7 +11,7 @@ export const createBlogPost = async (blogPostData: BlogPost): Promise<APIRespons
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const bodyToJson = JSON.stringify(blogPostData);
-    const url = `${SERVER_BASE_URL}/${endpoint}/create`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}/create`;
     const response = await fetch(url, {
       method: "POST",
       body: bodyToJson,
@@ -36,7 +36,7 @@ export const createTempBlogPostImage = async (image: File, tempId: string): Prom
     FD.append("file", image);
     FD.append("tempId", tempId);
     const token = (await cookies()).get("TOKEN")?.value;
-    const url = `${SERVER_BASE_URL}/images/create-temp-blog-post-image`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/images/create-temp-blog-post-image`;
     const response = await fetch(url, {
       method: "POST",
       body: FD,
@@ -60,7 +60,7 @@ export const createBlogPostImage = async (image: File, blogPostId: string): Prom
     FD.append("file", image);
     FD.append("blogPostId", blogPostId);
     const token = (await cookies()).get("TOKEN")?.value;
-    const url = `${SERVER_BASE_URL}/images/create-blog-post-image`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/images/create-blog-post-image`;
     const response = await fetch(url, {
       method: "POST",
       body: FD,
@@ -85,7 +85,7 @@ export const updateBlogPost = async (
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const bodyToJson = JSON.stringify(blogPostData);
-    const url = `${SERVER_BASE_URL}/${endpoint}/${blogPostId}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}/${blogPostId}`;
     const response = await fetch(url, {
       method: "PATCH",
       body: bodyToJson,
@@ -108,7 +108,7 @@ export const updateBlogPostSlug = async (blogPostId: string, slug: string): Prom
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const bodyToJson = JSON.stringify({ blogPostId, slug });
-    const url = `${SERVER_BASE_URL}/${endpoint}/update-slug`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}/update-slug`;
     const response = await fetch(url, {
       method: "PATCH",
       body: bodyToJson,
@@ -130,7 +130,7 @@ export const updateBlogPostSlug = async (blogPostId: string, slug: string): Prom
 export const deleteBlogPost = async (blogPostId: string) => {
   try {
     const token = (await cookies()).get("TOKEN")?.value;
-    const url = `${SERVER_BASE_URL}/${endpoint}/delete/${blogPostId}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}/delete/${blogPostId}`;
     const response = await fetch(url, {
       method: "DELETE",
       headers: {

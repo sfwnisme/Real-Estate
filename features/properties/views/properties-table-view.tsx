@@ -70,12 +70,12 @@ export default async function PropertiesTableView({
               <TableCell className="text-end w-fit">
                 <div className="inline-flex items-center gap-2">
                   <ButtonGroup>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" asChild>
                       <Link href={`${PAGES_ROUTES.PROPERTIES.PREVIEW}/${property.slug}`}>Open</Link>
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" asChild>
                       <Link
-                        href={`${PAGES_ROUTES.PROPERTIES.UPDATE}/${property._id}`}
+                        href={`${PAGES_ROUTES.PROPERTIES.UPDATE}/${property.slug}`}
                       >
                         <Pencil />
                       </Link>

@@ -18,8 +18,6 @@ export const metadata: Metadata = {
 };
 
 export default async function layout({ children }: Props) {
-  const currentuser = await getCurrentUser()
-  console.log(currentuser)
   return (
     <div className="relative">
       <DashboardLayout>

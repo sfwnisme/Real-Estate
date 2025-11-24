@@ -37,7 +37,7 @@ export default async function PropertyCard({
             {property.title}
           </p>
           <span className="text-xl text-gray-700 font-semibold hidden group-hover:block max-xl:block">
-            {Number(property.price).toLocaleString()}
+            {Number(property.price).toLocaleString("en-SA", {style: "currency", currency: "SAR"})}
           </span>
         </div>
         <div className="block xl:hidden group-hover:block text-black">

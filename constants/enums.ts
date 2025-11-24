@@ -2,8 +2,15 @@
 // enum values for the entire application
 //----------------------------
 
-export const SERVER_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-export const CLIENT_BASE_URL = process.env.NEXT_PUBLIC_PRODUCTION_BASE_URL;
+// Getter function for environment variable (HMR-safe)
+export const getBaseUrl = () => {
+  const url = process.env.NEXT_PUBLIC_BASE_URL;
+  if (!url) {
+    console.error("NEXT_PUBLIC_BASE_URL is not defined in .env");
+    return "http://localhost:8000/api"; // Fallback
+  }
+  return url;
+};
 
 export const PAGINATION_CONFIG = {
   PROPERTIES: {
@@ -96,6 +103,6 @@ export const FILES_CONFIGS = {
 
 export const MODELS = {
   PROPERTY: "Property",
-  BLOG: "Blog",
+  BLOG_POST: "BlogPost",
   USER: "User",
 } as const;

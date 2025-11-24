@@ -2,34 +2,32 @@
 
 import {
   PAGINATION_CONFIG,
-  SERVER_BASE_URL,
+  getBaseUrl,
   STATUS_TEXT,
 } from "@/constants/enums";
 import {
   APIResponsePaginated,
   APIResponse,
-  ApiErrorResponse,
-  ApiSuccessResponse,
   BlogPost,
   ImageType,
-  PaginatedApiResponse,
   Property,
   User,
 } from "@/types/types";
 import { cookies } from "next/headers";
 import { formatedApiErrRes, formatedSerErrRes } from "./utils";
 import { API_ROUTES } from "@/constants/config";
+import { revalidateTag } from "next/cache";
 
 export const getData = async <T>(
   endpoint: string,
   query?: string
 ): Promise<APIResponsePaginated<any>> => {
   try {
-    if (!SERVER_BASE_URL) {
-      throw new Error("SERVER_BASE_URL is not defined");
+    if (!process.env.NEXT_PUBLIC_BASE_URL) {
+      throw new Error("process.env.NEXT_PUBLIC_BASE_URL is not defined");
     }
     const queryParams = query ? query : "";
-    const url = `${SERVER_BASE_URL}${endpoint}${queryParams}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}${endpoint}${queryParams}`;
     const response = await fetch(url);
     const responseData = await response.json();
     return responseData ;
@@ -54,7 +52,7 @@ export const deleteDataByQueryParams = async (
       };
     }
     const token = (await cookies()).get("TOKEN")?.value;
-    const response = await fetch(SERVER_BASE_URL + endpoint + id, {
+    const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL + endpoint + id, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -83,7 +81,7 @@ export const getProperties = async (
   currentPage?: number
 ): Promise<APIResponsePaginated<Property[]>> => {
   try {
-    const url = `${SERVER_BASE_URL}/properties?pageSize=${pageSize}&page=${currentPage}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/properties?pageSize=${pageSize}&page=${currentPage}`;
     const response = await fetch(url, { cache: "no-cache" });
     const responseData = await response.json();
     if(!response.ok) {
@@ -97,11 +95,13 @@ export const getProperties = async (
 };
 
 export const getPropertyImages = async (
-  propertyId: string
+  propertyId: string,
 ): Promise<APIResponse<ImageType[]>> => {
   try {
-    const url = `${SERVER_BASE_URL}${"/images/property/"}${propertyId}`;
-    const response = await fetch(url);
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}${"/images/property/"}${propertyId}`;
+    const response = await fetch(url, {
+      next: {tags: [`delete-image-${propertyId}`, `property-images-${propertyId}`]}
+    });
     const responseData = await response.json();
 
     if(!response.ok) {
@@ -118,7 +118,7 @@ export const getProperty = async (
   slug: string
 ): Promise<APIResponse<Property>> => {
   try {
-    const url = `${SERVER_BASE_URL}${"/properties/"}${slug}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}${"/properties/"}${slug}`;
     const response = await fetch(url);
     const responseData = await response.json();
     if(!response.ok) {
@@ -139,7 +139,7 @@ export const getBlogPosts = async (
   currentPage?: number
 ): Promise<APIResponsePaginated<BlogPost[]>> => {
   try {
-    const url = `${SERVER_BASE_URL}/blog-posts?pageSize=${pageSize}&page=${currentPage}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/blog-posts?pageSize=${pageSize}&page=${currentPage}`;
     const response = await fetch(url, {
       cache: "no-cache",
       // next: { revalidate: 50 },
@@ -159,7 +159,7 @@ export const getBlogPost = async (
   blogPostId: string
 ): Promise<APIResponse<BlogPost>> => {
   try {
-    const url = `${SERVER_BASE_URL}/blog-posts/${blogPostId}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/blog-posts/${blogPostId}`;
     const response = await fetch(url, {
       cache: "no-cache",
     });
@@ -177,7 +177,7 @@ export const getBlogPostImage = async (
   blogPostId: string
 ): Promise<APIResponse<ImageType>> => {
   try {
-    const url = `${SERVER_BASE_URL}/images/blog-post/${blogPostId}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/images/blog-post/${blogPostId}`;
     const response = await fetch(url);
     const responseData = await response.json();
     if(!response.ok) {
@@ -200,7 +200,7 @@ export const login = async (
   try {
     const cookieStore = await cookies();
     const bodyToJson = JSON.stringify({ email, password });
-    const url = `${SERVER_BASE_URL}/users/login`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/users/login`;
     const response = await fetch(url, {
       method: "POST",
       body: bodyToJson,
@@ -209,7 +209,11 @@ export const login = async (
       },
     });
     const responseData = await response.json();
-    const accessToken = responseData.data.token;
+    const accessToken = responseData.data?.token;
+    if(!accessToken) {
+      console.log(responseData)
+      return responseData
+    }
     cookieStore.set({
       name: "TOKEN",
       value: "Bearer " + accessToken,
@@ -229,9 +233,11 @@ export const getCurrentUser = async (): Promise<
   APIResponse<Omit<User, "role" | "token">>
 > => {
   try {
-    const token = (await cookies()).get("TOKEN")?.value;
+    const cookiesStore = await cookies()
+    const token = cookiesStore.get("TOKEN")?.value;
+
     const response = await fetch(
-      SERVER_BASE_URL + API_ROUTES.USERS.CURRENT_USER,
+      process.env.NEXT_PUBLIC_BASE_URL + API_ROUTES.USERS.CURRENT_USER,
       {
         headers: {
           Authorization: String(token),
@@ -240,6 +246,7 @@ export const getCurrentUser = async (): Promise<
     );
     const responseData = await response.json();
     if (!response.ok) {
+      cookiesStore.delete("TOKEN")
       return formatedApiErrRes(responseData);
     }
     return {
@@ -255,10 +262,10 @@ export const getCurrentUser = async (): Promise<
 };
 
 // delete image -> (imageId)export
-export const deleteImage = async (imageId: string) => {
+export const deleteImage = async (imageId: string, ownerId: string) => {
   try {
     const token = (await cookies()).get("TOKEN")?.value;
-    const url = `${SERVER_BASE_URL}/images/delete/${imageId}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/images/delete/${imageId}`;
     const response = await fetch(url, {
       method: "DELETE",
       headers: {
@@ -270,6 +277,7 @@ export const deleteImage = async (imageId: string) => {
     if(!response.ok) {
       return formatedApiErrRes(responseData)
     }
+    revalidateTag(`delete-image-${ownerId}`)
     return responseData;
   } catch (error) {
     return formatedSerErrRes("server error", error);
