@@ -26,7 +26,7 @@ export default function InputWrapper(props: Props) {
   } = props;
   return (
     <div className={cn("flex flex-col w-full", className)}>
-      <Label className="h-[15px] flex flex-col items-start gap-2 size-full">
+      <Label className="h-[15px] flex flex-col items-start gap-2 size-full cursor-pointer">
         {title}
         <div className={cn("flex flex-col size-full", childrenClassName)}>
           {children}
