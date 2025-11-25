@@ -1,7 +1,3 @@
-import { STATUS_TEXT } from "@/constants/enums";
-import CreatePropertyTempImageFormView from "@/features/properties/views/create-property-temp-image-form-view";
-import PropertyImagesView from "@/features/properties/views/property-images-view";
-import UpdatePropertyFormView from "@/features/properties/views/mutation-views/update-property-form-view";
 import UpdatePropertyView from "@/features/properties/views/mutation-views/update-property-view";
 import { getProperty, getPropertyImages } from "@/lib/requests";
 import { Metadata } from "next";
