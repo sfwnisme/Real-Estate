@@ -46,11 +46,11 @@ export default function useUpdatePropertySlugFormValidation(
         );
         console.log("update property slug", updatedPropertySlugRes);
         if (updatedPropertySlugRes.statusText !== STATUS_TEXT.SUCCESS) {
+          form.setError("slug", { message: updatedPropertySlugRes.msg.msg });
           toast.error(
             typeof updatedPropertySlugRes.msg === "string"
               ? updatedPropertySlugRes.msg
-              : updatedPropertySlugRes.msg?.[0].field ||
-                  updatedPropertySlugRes.msg
+              : updatedPropertySlugRes.msg?.msg 
           );
           return;
         }

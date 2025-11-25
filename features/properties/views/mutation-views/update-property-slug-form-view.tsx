@@ -25,29 +25,25 @@ const UpdatePropertySlugFormView = (props: Props) => {
     property.slug
   );
   const router = useRouter();
-  const currentSlug = property.slug
-  const newSlug = slugify(form.watch("slug"), { lower: true });
-  const isSlugChanged = currentSlug !== newSlug
-  console.log("isSlugChanged", {isSlugChanged, currentSlug, newSlug});
-  const isDefaultSlug = property.title === form.watch("slug");
-  // Convert slug to normal text (replace "-" with space and capitalize words)
-  console.log("TRIGGER: slug");
+  const { isValid, isDirty } = form.formState;
+  const canUpdate = isValid || isPending;
+  const isDefaultSlug = slugify(property.title, { lower: true }) === property.slug;
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="flex flex-col gap-4">
       <InputWrapper
-        // title="Slug"
         description={
           process.env.NEXT_PUBLIC_BASE_URL +
           "/properties/" +
           slugify(form.getValues("slug"), { lower: true })
         }
+        error={form.formState.errors.slug?.message}
         childrenClassName="flex flex-row"
       >
         <Input type="text" {...form.register("slug")} />
       </InputWrapper>
       <ButtonGroup>
-        <Button type="submit" disabled={isPending || !isSlugChanged}>
+        <Button type="submit" disabled={!canUpdate}>
           {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
           Update Slug
         </Button>
@@ -56,12 +52,11 @@ const UpdatePropertySlugFormView = (props: Props) => {
           type="button"
           variant="outline"
           onClick={() => form.setValue("slug", property.title)}
-          disabled={isPending || isDefaultSlug}
+          disabled={isDefaultSlug}
           title={
             isDefaultSlug
               ? "This is the default slug"
               : "set the property title as the slug"
-              
           }
           aria-label="reset to default slug"
         >
@@ -70,11 +65,7 @@ const UpdatePropertySlugFormView = (props: Props) => {
         <Button
           variant="outline"
           type="button"
-          onClick={() =>
-            router.push(
-              `/properties/${property.slug}`
-            )
-          }
+          onClick={() => router.push(`/properties/${property.slug}`)}
           aria-label="visit property"
           title="Visit property"
         >
