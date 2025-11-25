@@ -21,6 +21,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Property } from "@/types/types";
 import useUpdatePropertyFormValidation from "../../hooks/use-update-property-form-validation";
 import FieldSet from "@/components/custom/field-set";
+import LoadingSpinner from "@/components/custom/loading-spinner";
 
 type Props = {
   property: Property;
@@ -32,7 +33,12 @@ const UpdatePropertyFormView = (props: Props) => {
     useUpdatePropertyFormValidation(property);
   const formErrors = form.formState.errors;
   const globalError = form.formState.errors.root?.message;
+
+  const isValueChanged = form.formState.isDirty;
+  const isValid = form.formState.isValid;
+  const canUpdate = isValueChanged && isValid && !isPending;
   console.log("TRIGGER: property-form");
+
   return (
     <div>
       <form onSubmit={onSubmit} className="grid lg:gap-4">
@@ -304,12 +310,8 @@ const UpdatePropertyFormView = (props: Props) => {
         >
           <AlertDescription>{globalError}</AlertDescription>
         </Alert>
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={isPending || !form.formState.isValid}
-        >
-          {isPending ? "Updating..." : "Update property details"}
+        <Button type="submit" className="w-full" disabled={!canUpdate}>
+          {isPending && <LoadingSpinner />}Update property details
         </Button>
         <DevTool control={form.control} />
       </form>

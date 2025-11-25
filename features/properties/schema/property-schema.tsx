@@ -61,7 +61,7 @@ export type CreatePropertyWithImagesType = z.infer<
 >;
 
 // update
-export const UpdatePropertySchema = CreatePropertyWithImagesSchema
+export const UpdatePropertySchema = CreatePropertySchema
 export type UpdatePropertyType = z.infer<typeof UpdatePropertySchema>;
 
 // update property slug
