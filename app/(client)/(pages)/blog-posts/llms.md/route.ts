@@ -2,8 +2,8 @@
 import { getBlogPosts } from "@/lib/requests";
 import { NextRequest, NextResponse } from "next/server";
 
-// Enable Next.js route handler caching, revalidating every 700 seconds
-export const revalidate = 60 * 60; // Use a number for seconds for better compatibility
+// Enable Next.js route handler caching, revalidating every 3600 seconds (1 hour)
+export const revalidate = 3600;
 // export const dynamic = 'force-static'
 // export const contentType = 'text/markdown'
 
@@ -51,7 +51,7 @@ publishedAt: ${p.publishedAt}
 source_url: 
   html: ${origin}/${p.slug}
   md: ${origin}/${p.slug}.md
-keywords: ${p.meta.keywords.join(", ")}
+keywords: ${keywords}
 ---`;
     const blogContent = `
 # ${p.title}
