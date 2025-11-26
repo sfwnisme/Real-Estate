@@ -1,5 +1,6 @@
 import PaginationLayout from "@/components/custom/pagination-layout";
 import { Button } from "@/components/ui/button";
+import { PAGES_ROUTES } from "@/constants/config";
 import { PAGINATION_CONFIG } from "@/constants/enums";
 import BlogPostsTableSkeleton from "@/features/blog-posts/skeletons/blog-posts-table-skeleton";
 import BlogPostsTableView from "@/features/blog-posts/views/blog-posts-table-view";
@@ -9,6 +10,8 @@ import { type Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
+
+const {CREATE} = PAGES_ROUTES.BLOG_POSTS
 
 export const metadata: Metadata = {
   title: "Blog posts",
@@ -37,7 +40,7 @@ export default async function page({
           Blog Posts
         </h1>
         <Button asChild>
-          <Link href="properties/create">Create blog post</Link>
+          <Link href={CREATE}>Create blog post</Link>
         </Button>
       </div>
       <Suspense
