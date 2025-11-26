@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
 
   lines.push("## Blog Posts \n");
   if (!blogPostsRes.data?.data || !propertiesRes.data?.data) {
-    return;
+    return new NextResponse("No data available", { status: 500 });
   }
 
   lines = lines.concat(
