@@ -86,3 +86,11 @@ export const returnFileSize = (bytes: number): string => {
     return bytes + " bytes";
   }
 };
+
+export const strToArrElms = (str: string): string[] => {
+  if (!str) return [];
+  return str
+    .split(",")
+    .map((element) => element.trim())
+    .filter((element) => element !== "");
+};
