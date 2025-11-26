@@ -2,17 +2,17 @@ import z from "zod";
 import { kbToBytes } from "@/lib/utils";
 const MAX_IMAGES = 15;
 const MAX_IMAGE_SIZE = 500 * 1024;
+const ACCEPTED_IMAGE_TYPES = ["image/webp", "image/jpeg"];
+
+export const ImageSchema = z
+  .file()
+  .max(kbToBytes(MAX_IMAGE_SIZE), `maximum size is ${MAX_IMAGE_SIZE / 1024}KB`)
+  .mime(ACCEPTED_IMAGE_TYPES, "only accept .webp and .jpeg image types");
+
+export type ImageType = z.infer<typeof ImageSchema>;
+
 export const CreateImageSchema = z.object({
-  image: z
-    .file()
-    .max(
-      kbToBytes(MAX_IMAGE_SIZE),
-      `maximum size is ${MAX_IMAGE_SIZE / 1024}KB`
-    )
-    .mime(
-      ["image/webp", "image/jpeg"],
-      "only accept .webp and .jpeg image types"
-    ),
+  image: ImageSchema,
   isFeatured: z.boolean(),
 });
 
