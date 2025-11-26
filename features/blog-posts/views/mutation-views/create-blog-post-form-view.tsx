@@ -12,13 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { fromTheme } from "tailwind-merge";
 import { BLOG_POST_STATUS } from "@/constants/enums";
 import { BlogPostStatus } from "@/types/types";
 import { Separator } from "@/components/ui/separator";
 import ImageInput from "@/components/custom/image-input";
-import { useFieldArray } from "react-hook-form";
-import Image from "next/image";
 import ImagePreview from "@/components/custom/image-preview";
 import { Button } from "@/components/ui/button";
 import LoadingSpinner from "@/components/custom/loading-spinner";
