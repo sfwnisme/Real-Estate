@@ -78,13 +78,14 @@ export default async function page({ params }: Props) {
   const { slug } = await params;
   const blogPost = await getBlogPost(slug);
   const blogPostData = blogPost.data;
-
   if (!blogPostData) {
     notFound();
   }
+  // const convertedContent = convertToHtml(blogPostData?.content || "");
   
   const blogPostImage = await getBlogPostImage(blogPostData._id);
   const blogPostImageData = blogPostImage.data;
+  console.log(blogPostImageData)
 
   const renderKeywords = blogPostData.meta.keywords.map((keyword) => (
     <Badge variant="outline" key={keyword}>
@@ -111,7 +112,7 @@ export default async function page({ params }: Props) {
           </div>
         )}
       </div>
-      <article className="mt-8">{blogPostData.content}</article>
+      <article className="mt-8" dangerouslySetInnerHTML={{ __html: blogPostData.content }} />
       <div className="mt-8 flex flex-wrap gap-2">{renderKeywords}</div>
     </div>
   );
