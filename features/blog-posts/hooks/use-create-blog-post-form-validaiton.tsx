@@ -10,6 +10,16 @@ import { createBlogPost, createBlogPostImage } from "../lib/requests";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
+/**
+ * Provides a validated form and submission handler for creating blog posts, including optional image upload, error reporting, and navigation.
+ *
+ * Handles form validation, submits blog post data to the API, conditionally uploads an image, registers form field or root errors on failure, displays toast notifications, and navigates to the created post on success.
+ *
+ * @returns An object containing:
+ * - `form`: the React Hook Form instance configured for creating blog posts.
+ * - `onSubmit`: a submit handler already bound to the form.
+ * - `isPending`: a boolean that is `true` while submission is in progress.
+ */
 export default function useCreateBlogPostFormValidation() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();

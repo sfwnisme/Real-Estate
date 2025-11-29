@@ -17,6 +17,14 @@ export const metadata: Metadata = {
   title: "Blog posts",
   description: "Blog posts page",
 };
+/**
+ * Renders the Blog Posts dashboard page with header, create button, posts table, and pagination.
+ *
+ * Fetches paginated blog post data based on `searchParams` and renders a skeleton while the table view is suspended.
+ *
+ * @param searchParams - An object (or promise resolving to one) containing query parameters such as `page`.
+ * @returns The blog posts dashboard page JSX including header, create button, posts table (within a Suspense boundary), and pagination controls.
+ */
 export default async function page({
   searchParams,
 }: {

@@ -7,6 +7,16 @@ const removeTrailingSlash = (url: string) => {
 };
 const generatedAt = new Date().toISOString();
 
+/**
+ * Generates a plain-text listing of blog posts and properties with HTML and Markdown URLs.
+ *
+ * The response body contains a human-readable, newline-separated list that includes a title,
+ * generation timestamp, and sections for blog posts and properties. Each entry provides a
+ * `source_url` block with `html` and `md` links derived from the request origin and item slug.
+ *
+ * @param req - Incoming Next.js request; the request origin is used to build full URLs
+ * @returns A NextResponse with a `text/plain; charset=utf-8` body containing the listing. If the required data is missing, returns a 500 response with the body `"No data available"`.
+ */
 export async function GET(req: NextRequest) {
   const { origin } = req.nextUrl;
   const [blogPostsRes, propertiesRes] = await Promise.all([

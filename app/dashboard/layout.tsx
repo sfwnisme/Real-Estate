@@ -24,6 +24,12 @@ export const metadata: Metadata = {
   description: "Dashboard page",
 };
 
+/**
+ * Wraps dashboard pages with the DashboardLayout and includes the global delete dialog.
+ *
+ * @param children - The page content to render inside the dashboard layout
+ * @returns A JSX element containing the dashboard layout and the global delete dialog
+ */
 export default async function layout({ children }: Props) {
   return (
     <div className="relative">

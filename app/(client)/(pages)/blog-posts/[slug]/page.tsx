@@ -13,6 +13,11 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+/**
+ * Produces route parameters for static generation of blog post pages.
+ *
+ * @returns An array of objects each containing a `slug` string for every available blog post; returns an empty array if no posts are found.
+ */
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const blogPosts = await getBlogPosts();
   if (!blogPosts.data?.data) {
@@ -74,6 +79,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+/**
+ * Render a blog post page for the provided slug.
+ *
+ * If no blog post is found for the slug, triggers a 404 page.
+ *
+ * @param params - An object with a `slug` string identifying the blog post to render
+ * @returns The JSX element for the blog post page
+ */
 export default async function page({ params }: Props) {
   const { slug } = await params;
   const blogPost = await getBlogPost(slug);

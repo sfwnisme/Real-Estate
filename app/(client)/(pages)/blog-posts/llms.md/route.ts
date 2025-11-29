@@ -15,6 +15,13 @@ const removeTrailingSlash = (url: string) =>
 // This makes sure that while the cache is valid, the timestamp does not change.
 const generatedAt = new Date().toISOString();
 
+/**
+ * Generate a plain-text export of blog posts consisting of top-level YAML front matter
+ * followed by per-post YAML metadata blocks and Markdown content.
+ *
+ * @param req - Incoming NextRequest whose URL origin is used to construct absolute post URLs
+ * @returns A NextResponse. On success, the response body is plain text containing the generated YAML and Markdown for each post, with Content-Type "text/plain; charset=utf-8" and a Cache-Control header using `s-maxage` equal to the route's `revalidate` value. On failure, a 500 response with body "No data available".
+ */
 export async function GET(req: NextRequest) {
   const { origin } = req.nextUrl;
 

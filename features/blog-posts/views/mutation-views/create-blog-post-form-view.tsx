@@ -21,6 +21,13 @@ import { Button } from "@/components/ui/button";
 import LoadingSpinner from "@/components/custom/loading-spinner";
 type Props = {};
 
+/**
+ * Render the blog post creation form with fields for title, excerpt, content, SEO settings, and featured image management.
+ *
+ * The form provides image upload and preview (with delete), status and meta fields, validation-aware submit buttons, and shows a loading state when submission is pending.
+ *
+ * @returns A JSX element containing the complete create-blog-post form UI
+ */
 export default function CreateBlogPostFormView({}: Props) {
   const { form, onSubmit, isPending } = useCreateBlogPostFormValidation();
   const image = form.watch("image");

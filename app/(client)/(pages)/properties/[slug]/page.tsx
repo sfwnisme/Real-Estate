@@ -13,6 +13,11 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+/**
+ * Create static route parameters for property pages by extracting slugs from fetched properties.
+ *
+ * @returns An array of objects each containing a `slug` string for use in static generation; returns an empty array if no property data is available.
+ */
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const properties = await getProperties();
   if (!properties.data?.data) {
@@ -25,6 +30,11 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
   return property;
 }
 
+/**
+ * Builds the page metadata for a property identified by its slug.
+ *
+ * @returns A Metadata object containing title, description, canonical URL, Open Graph and Twitter data (including images when available), and robots directives; returns an empty object if the property is not found.
+ */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
 
@@ -71,6 +81,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+/**
+ * Renders the property preview page for the given slug.
+ *
+ * Fetches the property by `slug` and displays its carousel, overview card, title, description, and optional YouTube video. If the property is not found, triggers a 404 response via `notFound()`.
+ *
+ * @param params - An object with a `slug` string identifying the property
+ * @returns The rendered JSX for the property page
+ */
 export default async function Page({ params }: Props) {
   const { slug } = await params;
   const property = await getProperty(slug);
