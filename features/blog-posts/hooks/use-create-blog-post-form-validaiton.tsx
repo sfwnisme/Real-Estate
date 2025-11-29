@@ -9,7 +9,6 @@ import { BLOG_POST_STATUS } from "@/constants/enums";
 import { createBlogPost, createBlogPostImage } from "../lib/requests";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { strToArrElms } from "@/lib/utils";
 
 export default function useCreateBlogPostFormValidation() {
   const [isPending, startTransition] = useTransition();
@@ -28,6 +27,7 @@ export default function useCreateBlogPostFormValidation() {
       },
       image: null,
     },
+    mode: "onBlur"
   });
 
   const onSubmit: SubmitHandler<CreateBlogPostType> = async (data) => {
@@ -48,7 +48,6 @@ export default function useCreateBlogPostFormValidation() {
       }
       const blogPostId = createBlogPostRes.data._id;
       const blogPostSlug = createBlogPostRes.data.slug;
-      console.log(createBlogPostRes);
       toast.success(createBlogPostRes.msg + (isImageExist && " without image"));
 
       if (!isImageExist) {
