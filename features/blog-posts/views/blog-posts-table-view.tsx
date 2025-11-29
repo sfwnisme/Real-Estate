@@ -67,7 +67,7 @@ export default async function BlogPostsTableView({
                     </Button>
                     <Button variant="outline" size="sm">
                       <Link
-                        href={`${PAGES_ROUTES.BLOG_POSTS.UPDATE}/${blogPost._id}`}
+                        href={`${PAGES_ROUTES.BLOG_POSTS.UPDATE}/${blogPost.slug}`}
                       >
                         <Pencil />
                       </Link>
