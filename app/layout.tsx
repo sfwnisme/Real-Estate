@@ -4,7 +4,6 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { SITE_INFO } from "@/constants/config";
 
-
 const interFont = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -28,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${interFont.variable} antialiased overflow-x-hidden`}>
         {children}
-        <Toaster position="top-right" expand/>
+        <Toaster position="top-right" expand />
       </body>
     </html>
   );
