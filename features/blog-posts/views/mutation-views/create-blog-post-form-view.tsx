@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import useCreateBlogPostFormValidation from "../../hooks/use-create-blog-post-form-validaiton";
 import FieldSet from "@/components/custom/field-set";
 import { Input } from "@/components/ui/input";
@@ -25,21 +25,43 @@ export default function CreateBlogPostFormView({}: Props) {
   const { form, onSubmit, isPending } = useCreateBlogPostFormValidation();
   const image = form.watch("image");
   const imageUrl = image
-    ? URL.createObjectURL(form.watch("image") as File)
+    ? URL.createObjectURL(form.getValues("image") as File)
     : "";
-  console.log(form.watch());
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
-    if (files) {
-      form.setValue("image", files[0]);
+    if (!files) {
+      e.target.value = "";
+      return;
     }
-    return null;
+    const file = files[0];
+    form.setValue("image", file);
+
+    e.target.value = "";
+    form.trigger("image");
   };
 
   const handleDeleteImage = () => {
     form.setValue("image", null);
+    form.trigger("image");
   };
+
+  const renderImage = useMemo(() => {
+    if (!image) return;
+    return (
+      <div>
+        <ImagePreview
+          isFeatured={false}
+          imageUrl={imageUrl}
+          imageType={image.type}
+          imageSize={image.size}
+          disableSetFeaturedImage={true}
+          deleteImage={handleDeleteImage}
+          error={form.formState.errors.image?.message}
+        />
+      </div>
+    );
+  }, [imageUrl, form.formState.errors.image?.message, image]);
 
   return (
     <div>
@@ -72,7 +94,11 @@ export default function CreateBlogPostFormView({}: Props) {
               />
             </InputWrapper>
           </FieldSet>
-          <Button type="submit" disabled={isPending || !form.formState.isValid} className="hidden lg:block">
+          <Button
+            type="submit"
+            disabled={isPending || !form.formState.isValid}
+            className="hidden lg:flex"
+          >
             {isPending && <LoadingSpinner />}Create Blog Post
           </Button>
         </div>
@@ -135,23 +161,18 @@ export default function CreateBlogPostFormView({}: Props) {
           </FieldSet>
           <FieldSet title="Featured Image">
             {image ? (
-              <div>
-                <ImagePreview
-                  isFeatured={false}
-                  imageUrl={imageUrl}
-                  imageType={image?.type}
-                  imageSize={image?.size}
-                  disableSetFeaturedImage={true}
-                  deleteImage={handleDeleteImage}
-                />
-              </div>
+              renderImage
             ) : (
               <InputWrapper error={form.formState.errors.image?.message}>
                 <ImageInput onChange={handleImageChange} />
               </InputWrapper>
             )}
           </FieldSet>
-          <Button type="submit" disabled={isPending || !form.formState.isValid} className="w-full lg:hidden">
+          <Button
+            type="submit"
+            disabled={isPending || !form.formState.isValid}
+            className="w-full lg:hidden"
+          >
             {isPending && <LoadingSpinner />}Create Blog Post
           </Button>
         </div>
