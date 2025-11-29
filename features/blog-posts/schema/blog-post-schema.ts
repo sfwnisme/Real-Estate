@@ -25,3 +25,8 @@ export const UpdateBlogPostSchema = CreateBlogPostSchema.partial().omit({
   image: true,
 });
 export type UpdateBlogPostType = z.infer<typeof UpdateBlogPostSchema>;
+
+export const UpdateBlogPostSlugSchema = z.object({
+  slug: z.string().min(3, { message: "Slug is required" }),
+});
+export type UpdateBlogPostSlugType = z.infer<typeof UpdateBlogPostSlugSchema>;
