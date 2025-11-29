@@ -21,8 +21,8 @@ const ImageInput = forwardRef<HTMLInputElement, InputType>(
           id={inputId}
           style={{ display: "none" }}
           ref={ref}
-          accept="image/*"
           {...props}
+          accept="image/*"
         />
         <label
           htmlFor={inputId}
