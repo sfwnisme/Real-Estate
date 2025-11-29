@@ -7,7 +7,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/webp", "image/jpeg"];
 export const ImageSchema = z
   .file()
   .max(kbToBytes(MAX_IMAGE_SIZE), `maximum size is ${MAX_IMAGE_SIZE / 1024}KB`)
-  .mime(ACCEPTED_IMAGE_TYPES, "only accept .webp and .jpeg image types");
+  .mime(ACCEPTED_IMAGE_TYPES, "only accept .WEBP and .JPEG image types");
 
 export type ImageType = z.infer<typeof ImageSchema>;
 
