@@ -1,8 +1,8 @@
 import { getBlogPosts } from "@/lib/requests";
 import { NextRequest, NextResponse } from "next/server";
 
-// Enable Next.js route handler caching, revalidating every 700 seconds
-export const revalidate = 60*60; // Use a number for seconds for better compatibility
+// Enable Next.js route handler caching, revalidating every 3600 seconds (1 hour)
+export const revalidate = 3600;
 
 // helpers
 const removeTrailingSlash = (url: string) =>

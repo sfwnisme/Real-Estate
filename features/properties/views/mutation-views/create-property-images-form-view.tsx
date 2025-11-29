@@ -118,7 +118,6 @@ const CreatePropertyImagesFormView = (props: Props) => {
       <InputWrapper error={globalImagesError}>
         <ImageInput
           onChange={(e) => handleImageChange(e)}
-          accept="image/*"
           multiple
           className="h-full"
         />

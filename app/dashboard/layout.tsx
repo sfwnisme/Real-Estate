@@ -1,9 +1,16 @@
+import LoadingPage from "@/components/custom/loading-page";
 import { SITE_INFO } from "@/constants/config";
 import DashboardLayout from "@/features/dashboard/dashboard-layout";
-import GlobalDeleteDialog from "@/features/dashboard/global-delete-dialog";
-import { getCurrentUser } from "@/lib/requests";
 import { Metadata } from "next";
-import React from "react";
+import dynamic from "next/dynamic";
+import React, { Suspense } from "react";
+const GlobalDeleteDialog = dynamic(
+  () => import("@/features/dashboard/global-delete-dialog"),
+  {
+    loading: () => <LoadingPage />,
+  }
+);
+
 
 type Props = {
   children: React.ReactNode;
@@ -22,9 +29,10 @@ export default async function layout({ children }: Props) {
     <div className="relative">
       <DashboardLayout>
         {children}
-        {/* <DeletePropertyDialog /> */}
       </DashboardLayout>
-      <GlobalDeleteDialog />
+      <Suspense fallback={null}>
+        <GlobalDeleteDialog />
+      </Suspense>
     </div>
   );
 }

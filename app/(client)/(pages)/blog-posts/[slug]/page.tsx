@@ -5,7 +5,7 @@ import { getBlogPost, getBlogPostImage, getBlogPosts } from "@/lib/requests";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import React from "react";
-import { OgImageType } from "@/types/types";
+import { BlogPost, OgImageType } from "@/types/types";
 import { Metadata } from "next";
 import { PAGES_ROUTES, SITE_INFO } from "@/constants/config";
 
@@ -13,16 +13,16 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const blogPosts = await getBlogPosts();
   if (!blogPosts.data?.data) {
-    return {};
+    return [];
   }
 
   const blogPost = blogPosts.data.data.map((blogPost) => ({
     slug: blogPost.slug,
   }));
-  if (blogPost.length === 0) return {};
+  if (blogPost.length === 0) return [];
   return blogPost;
 }
 
@@ -78,7 +78,6 @@ export default async function page({ params }: Props) {
   const { slug } = await params;
   const blogPost = await getBlogPost(slug);
   const blogPostData = blogPost.data;
-
   if (!blogPostData) {
     notFound();
   }
@@ -111,7 +110,7 @@ export default async function page({ params }: Props) {
           </div>
         )}
       </div>
-      <article className="mt-8">{blogPostData.content}</article>
+      <article className="mt-8" dangerouslySetInnerHTML={{ __html: blogPostData.content }} />
       <div className="mt-8 flex flex-wrap gap-2">{renderKeywords}</div>
     </div>
   );

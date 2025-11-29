@@ -1,4 +1,3 @@
-"use client";
 import CreatePropertyWithImagesFormView from '@/features/properties/views/mutation-views/create-property-with-images-form-view';
 import { Metadata } from 'next';
 import React from 'react'

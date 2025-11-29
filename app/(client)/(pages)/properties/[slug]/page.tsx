@@ -13,23 +13,19 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const properties = await getProperties();
   if (!properties.data?.data) {
-    return {};
+    return [];
   }
   const property = properties.data?.data.map((property) => ({
     slug: property.slug,
   }));
-  if (property.length === 0) return {};
+  if (property.length === 0) return [];
   return property;
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
 
   const property = await getProperty(slug);
@@ -38,7 +34,7 @@ export async function generateMetadata({
   }
   const propertyData = property.data;
   const propertyImages = await getPropertyImages(property.data._id);
-  const propertyImagesData = propertyImages.data
+  const propertyImagesData = propertyImages.data;
 
   const propertyImagesMetadata: OgImageType[] | undefined =
     propertyImagesData?.map((image) => ({
@@ -75,7 +71,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({params}: Props) {
+export default async function Page({ params }: Props) {
   const { slug } = await params;
   const property = await getProperty(slug);
   const propertyData = property.data;
