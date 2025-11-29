@@ -1,5 +1,7 @@
 import { BLOG_POST_STATUS } from "@/constants/enums";
-import { ImageSchema, ImagesArraySchema } from "@/features/properties/schema/image-schema";
+import {
+  ImageSchema,
+} from "@/features/properties/schema/image-schema";
 import { z } from "zod";
 
 const MetadataSchema = z.object({
@@ -14,7 +16,12 @@ export const CreateBlogPostSchema = z.object({
   content: z.string().min(10, { message: "Content is required" }),
   status: z.enum(Object.values(BLOG_POST_STATUS)),
   meta: MetadataSchema,
-  image: ImageSchema.nullable().optional()
+  image: ImageSchema.nullable().optional(),
 });
 export type CreateBlogPostType = z.infer<typeof CreateBlogPostSchema>;
 
+// update blog post schema
+export const UpdateBlogPostSchema = CreateBlogPostSchema.partial().omit({
+  image: true,
+});
+export type UpdateBlogPostType = z.infer<typeof UpdateBlogPostSchema>;
