@@ -81,11 +81,9 @@ export default async function page({ params }: Props) {
   if (!blogPostData) {
     notFound();
   }
-  // const convertedContent = convertToHtml(blogPostData?.content || "");
   
   const blogPostImage = await getBlogPostImage(blogPostData._id);
   const blogPostImageData = blogPostImage.data;
-  console.log(blogPostImageData)
 
   const renderKeywords = blogPostData.meta.keywords.map((keyword) => (
     <Badge variant="outline" key={keyword}>
