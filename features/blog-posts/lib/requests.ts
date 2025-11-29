@@ -1,6 +1,4 @@
 "use server";
-
-import { getBaseUrl } from "@/constants/enums";
 import {
   formatedApiErrRes,
   formatedSerErrRes,
@@ -8,7 +6,7 @@ import {
 } from "@/lib/utils";
 import { APIResponse, BlogPost, ImageType } from "@/types/types";
 import { cookies } from "next/headers";
-import { CreateBlogPostType } from "../schema/blog-post-schema";
+import { CreateBlogPostType, UpdateBlogPostType } from "../schema/blog-post-schema";
 import { API_ROUTES } from "@/constants/config";
 
 const { CREATE, UPDATE, DELETE, UPDATE_SLUG } = API_ROUTES.BLOG_POSTS;
@@ -107,7 +105,7 @@ export const createBlogPostImage = async (
 };
 
 export const updateBlogPost = async (
-  blogPostData: BlogPost,
+  blogPostData: UpdateBlogPostType,
   blogPostId: string
 ): Promise<APIResponse<BlogPost>> => {
   try {
