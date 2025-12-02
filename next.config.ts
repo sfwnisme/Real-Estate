@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    unoptimized: process.env.NEXT_PUBLIC_NETLIFY === 'true' ?? false,
+    unoptimized: process.env.NEXT_PUBLIC_NETLIFY === 'true',
     remotePatterns: [
        // AWS S3 buckets
        {
