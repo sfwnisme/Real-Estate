@@ -8,6 +8,7 @@ import { APIResponse, BlogPost, ImageType } from "@/types/types";
 import { cookies } from "next/headers";
 import { CreateBlogPostType, UpdateBlogPostType } from "../schema/blog-post-schema";
 import { API_ROUTES } from "@/constants/config";
+import { revalidateTag } from "next/cache";
 
 const { CREATE, UPDATE, DELETE, UPDATE_SLUG } = API_ROUTES.BLOG_POSTS;
 const { CREATE_BLOG_POST_IMAGE, CREATE_TEMP_BLOG_POST_IMAGE } =
@@ -98,6 +99,7 @@ export const createBlogPostImage = async (
     if (!response.ok) {
       return formatedApiErrRes(responseData);
     }
+    revalidateTag(`blog-post-image-${blogPostId}`);
     return responseData;
   } catch (error) {
     return formatedSerErrRes("server error", error);
