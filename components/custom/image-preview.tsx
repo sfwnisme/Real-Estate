@@ -12,7 +12,7 @@ type Props = {
   imageSize: number;
   imageType: string;
   imageUrl: string;
-  isFeatured: boolean;
+  isFeatured?: boolean;
   disableSetFeaturedImage?: boolean;
   deleteImage?: () => void;
   disableDeleteImage?: boolean;
