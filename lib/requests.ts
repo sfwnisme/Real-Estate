@@ -178,7 +178,9 @@ export const getBlogPostImage = async (
 ): Promise<APIResponse<ImageType>> => {
   try {
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/images/blog-post/${blogPostId}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      next: {tags: [`blog-post-image-${blogPostId}`, `delete-image-${blogPostId}`]}
+    });
     const responseData = await response.json();
     if(!response.ok) {
       return formatedApiErrRes(responseData)

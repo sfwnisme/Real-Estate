@@ -151,3 +151,4 @@ export type OgImageType = {
 };
 
 export type SearchParamsType = Promise<{ [key: string]: string | undefined }>;
+export type SlugParamsType = Promise<{ slug: string }>;

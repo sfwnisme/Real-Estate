@@ -1,0 +1,102 @@
+"use client";
+import { cn, returnFileSize, textTrimmer } from "@/lib/utils";
+import { ImageType } from "@/types/types";
+import { Trash2 } from "lucide-react";
+import Image from "next/image";
+import React, { memo, useCallback, useMemo, useTransition } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "../../../../components/ui/label";
+import { Checkbox } from "../../../../components/ui/checkbox";
+import { deleteImage } from "@/lib/requests";
+import { toast } from "sonner";
+import { setFeaturedImage } from "@/features/properties/lib/requests";
+import ImagePreview from "../../../../components/custom/image-preview";
+
+type Props = {
+  images: ImageType[] | null;
+};
+
+const UploadedPropertyImagesView = (props: Props) => {
+  const images = props.images || [];
+  const ownerId = images[0]?.ownerId;
+  const [isPending, startTransition] = useTransition();
+  console.log("TRIGGER: uploaded-images");
+  const handleSetFeaturedImage = useCallback(
+    async (id: string) => {
+      startTransition(() => {
+        toast.promise(
+          async () => {
+            const featuredImage = await setFeaturedImage(id, ownerId);
+            if (!featuredImage.data) {
+              throw new Error(
+                featuredImage.msg || "Failed to set featured image"
+              );
+            }
+            // revalidateTag handles the data refresh automatically
+            return featuredImage.data;
+          },
+          {
+            loading: "Setting featured image...",
+            success: "Featured image set successfully",
+            error: "Failed to set featured image",
+          }
+        );
+      });
+    },
+    [ownerId]
+  );
+  
+  const handleDeleteImage = useCallback(
+    async (id: string) => {
+      startTransition(() => {
+        toast.promise(
+          async () => {
+            const deletedImage = await deleteImage(String(id), ownerId);
+            if (!deletedImage.data) {
+              throw new Error(deletedImage.msg || "Failed to delete image");
+            }
+            // No need for router.refresh() - revalidateTag handles it
+            return deletedImage.data;
+          },
+          {
+            loading: "Deleting image...",
+            success: "Image deleted successfully",
+            error: "Failed to delete image",
+          }
+        );
+      });
+    },
+    [ownerId]
+  );
+
+  const renderImagePreview = useMemo(() => {
+    return (
+      <div className="w-full py-2">
+        <div className="grid rounded-2xl gap-2 w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
+          {images.map((image) => {
+            return <ImagePreview 
+            key={image._id} 
+            imageSize={Number(image.size)} 
+            imageType={image.mimeType} 
+            imageUrl={image.url} 
+            isFeatured={image.isFeatured} 
+            disableSetFeaturedImage={false} 
+            deleteImage={() => handleDeleteImage(image._id)}
+            setFeaturedImage={() => handleSetFeaturedImage(image._id)}
+            />;
+          })}
+        </div>
+      </div>
+    );
+  }, [images, handleDeleteImage, handleSetFeaturedImage]);
+
+  return (
+    images.length > 0 && (
+      <div className="overflow-y-scroll flex gap-2 max-h-100 items-start">
+        {renderImagePreview}
+      </div>
+    )
+  );
+}
+
+export default memo(UploadedPropertyImagesView);

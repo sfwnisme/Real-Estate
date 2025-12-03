@@ -1,5 +1,6 @@
 import UpdatePropertyView from "@/features/properties/views/mutation-views/update-property-view";
 import { getProperty, getPropertyImages } from "@/lib/requests";
+import { SlugParamsType } from "@/types/types";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -9,9 +10,11 @@ export const metadata: Metadata = {
   description: "Update Property posts page",
 };
 
-export default async function page(props: {
-  params: Promise<{ slug: string }>;
-}) {
+type Props = {
+  params: SlugParamsType;
+}
+
+export default async function page(props: Props) {
   const params = await props.params;
   const { slug } = params;
   const property = await getProperty(slug);
