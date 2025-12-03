@@ -45,6 +45,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
   const canonicalUrl = PAGES_ROUTES.BLOG_POSTS.PREVIEW + slug;
 
+  console.log(blogPostImageData)
+
   return {
     title: blogPostData.title,
     description: blogPostData.meta.description || blogPostData.excerpt,
