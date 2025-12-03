@@ -3,10 +3,10 @@
 import { ImageType, Property } from "@/types/types";
 import React, { useMemo } from "react";
 import UpdatePropertyFormView from "./update-property-form-view";
-import UploadedImageView from "@/components/custom/uploaded-images-view";
 import CreateNewPropertyImagesFormView from "./create-new-property-images-form-view";
 import FieldSet from "@/components/custom/field-set";
 import UpdatePropertySlugFormView from "./update-property-slug-form-view";
+import UploadedPropertyImagesView from "@/features/properties/views/mutation-views/uploaded-property-images-view";
 
 type Props = {
   property: Property;
@@ -41,7 +41,7 @@ export default function UpdatePropertyView(props: Props) {
           title="Current images"
           description="View the current images for the property"
         >
-          <UploadedImageView images={stableImages} />
+          <UploadedPropertyImagesView images={stableImages} />
         </FieldSet>
         <FieldSet
           title="Upload images"
