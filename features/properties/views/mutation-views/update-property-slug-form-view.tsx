@@ -33,7 +33,7 @@ const UpdatePropertySlugFormView = (props: Props) => {
     <form onSubmit={onSubmit} className="flex flex-col gap-4">
       <InputWrapper
         description={
-          process.env.NEXT_PUBLIC_BASE_URL +
+          process.env.NEXT_PUBLIC_FRONTEND_URL +
           "/properties/" +
           slugify(form.getValues("slug"), { lower: true })
         }
@@ -43,9 +43,9 @@ const UpdatePropertySlugFormView = (props: Props) => {
         <Input type="text" {...form.register("slug")} />
       </InputWrapper>
       <ButtonGroup>
-        <Button type="submit" disabled={!canUpdate}>
+        <Button type="submit" disabled={!canUpdate} size="sm">
           {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-          Update Slug
+          Update
         </Button>
         <ButtonGroupSeparator />
         <Button
@@ -59,8 +59,9 @@ const UpdatePropertySlugFormView = (props: Props) => {
               : "set the property title as the slug"
           }
           aria-label="reset to default slug"
+          size="sm"
         >
-          Use Default
+          Reset
         </Button>
         <Button
           variant="outline"
@@ -68,6 +69,7 @@ const UpdatePropertySlugFormView = (props: Props) => {
           onClick={() => router.push(`/properties/${property.slug}`)}
           aria-label="visit property"
           title="Visit property"
+          size="sm"
         >
           Visit
         </Button>
