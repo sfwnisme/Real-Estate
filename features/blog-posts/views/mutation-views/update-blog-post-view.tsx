@@ -19,7 +19,7 @@ export default function UpdateBlogPostView(props: Props) {
   const stableImage = useMemo(() => image, [image?._id, image?.url]);
 
   return (
-    <div className="grid grid-cols-5 gap-4">
+    <div className="grid lg:grid-cols-5 gap-4">
       <div className="col-span-3">
         <UpdateBlogPostFormView blogPost={stableBlogPost} />
       </div>
