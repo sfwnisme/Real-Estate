@@ -279,7 +279,7 @@ export const deleteImage = async (imageId: string, ownerId: string) => {
     if(!response.ok) {
       return formatedApiErrRes(responseData)
     }
-    revalidateTag(`delete-image-${ownerId}`)
+    revalidateTag(`delete-image-${ownerId}`, "max")
     return responseData;
   } catch (error) {
     return formatedSerErrRes("server error", error);
