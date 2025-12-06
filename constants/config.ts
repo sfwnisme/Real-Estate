@@ -69,7 +69,6 @@ export const API_ROUTES = {
     CURRENT_USER: "/users/me",
     CREATE: "/users/create",
     UPDATE: "/users",
-    UPDATE_SLUG: "/users/update-slug",
     DELETE: "/users/delete",
   },
   IMAGES: {
