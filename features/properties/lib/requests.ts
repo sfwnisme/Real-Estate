@@ -140,7 +140,7 @@ export const createPropertyImage = async (
     if (!response.ok) {
       return formatedApiErrRes(responseData);
     }
-    revalidateTag(`property-images-${propertyId}`)
+    revalidateTag(`property-images-${propertyId}`, "max");
     return responseData;
   } catch (error) {
     return formatedSerErrRes("server error", error);
@@ -164,7 +164,7 @@ export const setFeaturedImage = async(imageId: string, ownerId: string): Promise
     if (!response.ok) {
       return formatedApiErrRes(responseData);
     }
-    revalidateTag(`property-images-${ownerId}`);
+    revalidateTag(`property-images-${ownerId}`, "max");
     return responseData;
   } catch (error) {
     return formatedSerErrRes("server error", error);
