@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "dev:limit-size-4gb": "NODE_OPTIONS='--max-old-space-size=4096' next dev --turbopack",
-    "dev:no-turbopack": "NODE_OPTIONS='--max-old-space-size=2048' next dev",
-    "build": "next build --turbopack",
+    "dev": "next dev",
+    "dev:limit-size-4gb": "NODE_OPTIONS='--max-old-space-size=4096' next dev",
+    "dev:webpack": "NODE_OPTIONS='--max-old-space-size=2048' next dev --webpack",
+    "build": "next build",
+    "build:webpack": "next build --webpack",
     "start": "next start"
   },
   "dependencies": {
