@@ -99,7 +99,7 @@ export const createBlogPostImage = async (
     if (!response.ok) {
       return formatedApiErrRes(responseData);
     }
-    revalidateTag(`blog-post-image-${blogPostId}`);
+    revalidateTag(`blog-post-image-${blogPostId}`, "max");
     return responseData;
   } catch (error) {
     return formatedSerErrRes("server error", error);
