@@ -9,9 +9,12 @@ const endpoint = "/users";
 
 export const getUsers = async (): Promise<APIResponse<User[]>> => {
   try {
+    const token = (await cookies()).get("TOKEN")?.value
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}${endpoint}`;
     const response = await fetch(url, {
-      next: { revalidate: 50 },
+      headers: {
+        Authorization: String(token),
+      },
     });
     const responseData = await response.json();
     return responseData;
