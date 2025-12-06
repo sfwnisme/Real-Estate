@@ -2,7 +2,7 @@ import { USER_ROLES } from "@/constants/enums";
 import z from "zod";
 
 export const CreateUserSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
+  name: z.string().min(4, { message: "Name is required" }),
   email: z.email({ message: "Invalid email address" }),
   password: z
     .string()
