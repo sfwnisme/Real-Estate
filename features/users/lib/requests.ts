@@ -4,8 +4,12 @@ import { getBaseUrl } from "@/constants/enums";
 import { formatedSerErrRes } from "@/lib/utils";
 import { APIResponse, User } from "@/types/types";
 import { cookies, headers } from "next/headers";
+import { CreateUserSchemaType } from "../schema/user-schema";
+import { API_ROUTES } from "@/constants/config";
 
 const endpoint = "/users";
+
+const {CREATE, UPDATE, DELETE, CURRENT_USER} = API_ROUTES.USERS
 
 export const getUsers = async (): Promise<APIResponse<User[]>> => {
   try {
@@ -53,11 +57,11 @@ export const getCurrentUser = async (): Promise<APIResponse<User>> => {
   }
 };
 
-export const createUser = async (userData: User): Promise<APIResponse<User>>  => {
+export const createUser = async (userData: CreateUserSchemaType): Promise<APIResponse<User>>  => {
   try {
     const token = (await cookies()).get("TOKEN")?.value;
     const bodyToJson = JSON.stringify(userData);
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}${endpoint}/register`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}${CREATE}`;
     const response = await fetch(url, {
       method: "POST",
       body: bodyToJson,
