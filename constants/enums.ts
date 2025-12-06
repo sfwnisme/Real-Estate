@@ -27,6 +27,7 @@ export const PAGINATION_CONFIG = {
     },
     DASHBOARD: 9,
   },
+  
 };
 
 export const STATUS_TEXT = {
